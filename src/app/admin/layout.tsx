@@ -1,11 +1,9 @@
 
 'use client';
 import { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar"
-import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users, Briefcase, LogOut } from "lucide-react"
+import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users, Briefcase } from "lucide-react"
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { handleLogout } from "@/app/login/actions";
-import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 
 export default function AdminLayout({
   children,
@@ -13,7 +11,6 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname();
-  const router = useRouter();
 
   const menuItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -24,11 +21,6 @@ export default function AdminLayout({
     { href: "/admin/partners", label: "Mitra", icon: Users },
     { href: "/admin/vacancies", label: "Lowongan", icon: Briefcase },
   ];
-
-  const onLogout = async () => {
-    await handleLogout();
-    router.push('/login');
-  };
 
   return (
     <SidebarProvider>
@@ -44,14 +36,6 @@ export default function AdminLayout({
                 </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
-        </SidebarMenu>
-        <SidebarMenu>
-            <SidebarMenuItem>
-                <Button variant="ghost" className="w-full justify-start gap-2 p-2" onClick={onLogout}>
-                    <LogOut className="h-4 w-4" />
-                    <span>Logout</span>
-                </Button>
-            </SidebarMenuItem>
         </SidebarMenu>
       </Sidebar>
       <SidebarInset>
