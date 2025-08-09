@@ -65,9 +65,9 @@ export default function ContactPage() {
                 alt="Kontak RSU Meloy"
                 data-ai-hint="hospital reception"
                 fill
-                className="object-cover brightness-50"
+                className="object-cover"
             />
-            <div className="absolute inset-0 bg-black/50" />
+            <div className="absolute inset-0 bg-primary/70" />
             <div className="container relative z-10 flex h-full items-center justify-center text-center text-white">
                 <div className="max-w-2xl">
                     <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl font-headline">
