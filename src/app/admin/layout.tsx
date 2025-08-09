@@ -64,7 +64,8 @@ export default function AdminLayout({
             <h1 className="text-xl font-bold">Admin Dashboard</h1>
         </header>
         <main className="p-4 md:p-6">
-            {children}
+            <h2 className="text-2xl font-bold mb-4">Selamat Datang di Dashboard Admin</h2>
+            <p>Kelola konten website melalui menu di samping.</p>
         </main>
       </SidebarInset>
     </SidebarProvider>
