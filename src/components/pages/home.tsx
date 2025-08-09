@@ -186,15 +186,15 @@ export default function HomePage() {
       <section className="py-16 md:py-24">
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('mitraKami')} subtitle={t('mitraSubtitle')} />
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+          <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
             {loadingPartners ? (
-                Array.from({ length: 6 }).map((_, index) => (
+                Array.from({ length: 8 }).map((_, index) => (
                     <div key={index} className="flex justify-center">
                         <Skeleton className="h-[70px] w-[140px]" />
                     </div>
                 ))
             ) : (
-                partners.map((partner) => (
+                partners.slice(0, 8).map((partner) => (
                 <div key={partner.docId} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
                     <Image
                     src={partner.imageUrl}
@@ -207,6 +207,13 @@ export default function HomePage() {
                 </div>
                 ))
             )}
+          </div>
+          <div className="mt-12 text-center">
+            <Button variant="outline" asChild>
+              <Link href="/about?page=partners">
+                {t('selengkapnya')} <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
