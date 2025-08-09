@@ -7,7 +7,6 @@ import type { Doctor } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Calendar, User } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { handleSmartSearch } from '@/app/actions';
@@ -15,6 +14,7 @@ import { getDoctors } from '@/app/admin/actions';
 import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Separator } from '@/components/ui/separator';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
@@ -153,16 +153,14 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
               displayedDoctors.map((doc: Doctor) => (
                 <Card key={doc.id} className="transition-shadow hover:shadow-lg">
                   <CardContent className="p-4 md:p-6 flex items-start gap-4 md:gap-6">
-                    <Avatar className="h-24 w-24 border-2 border-primary flex-shrink-0">
-                      <AvatarFallback>
-                        <User className="h-12 w-12 text-muted-foreground" />
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="p-2 bg-primary/10 rounded-full flex-shrink-0 mt-1">
+                        <User className="h-16 w-16 text-primary" />
+                    </div>
                     <div className="flex-1">
-                      <div className="flex justify-between items-start">
+                      <div className="flex justify-between items-start mb-2">
                           <div>
                               <h3 className="text-xl font-bold text-gray-900">{doc.name}</h3>
-                              <p className="text-primary font-semibold mb-3">{doc.specialty}</p>
+                              <p className="text-primary font-semibold">{doc.specialty}</p>
                           </div>
                           <Tooltip>
                             <TooltipTrigger>
@@ -175,6 +173,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
                             </TooltipContent>
                           </Tooltip>
                       </div>
+                      <Separator className="my-3" />
                       <div className="flex items-center gap-2 text-muted-foreground text-sm">
                         <Calendar className="h-4 w-4 text-primary" />
                         <span>{doc.schedule}</span>
