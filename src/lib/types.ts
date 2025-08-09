@@ -33,6 +33,8 @@ export interface Doctor {
   schedule: string;
   imageUrl: string;
   aiHint: string;
+  // Firestore document ID, optional as it's not present on creation
+  docId?: string;
 }
 
 export interface Translation {
