@@ -68,6 +68,8 @@ export default function AboutPage({ subPage }: AboutPageProps) {
         return <ArticlesList />;
       case 'partners':
         return <PartnersList />;
+      case 'vacancies':
+        return <DefaultContent title={t('lowonganKerja')} />;
       default:
         return <ProfileContent />;
     }

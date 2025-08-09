@@ -8,12 +8,14 @@ export const translations: Translations = {
         mitra: 'Mitra Kami',
         mitraKami: 'Mitra Terpercaya Kami',
         mitraSubtitle: 'Kami bekerja sama dengan berbagai perusahaan dan asuransi terkemuka untuk memberikan pelayanan terbaik.',
+        lowonganKerja: 'Lowongan Kerja',
     },
     en: {
         beranda: 'Home', layanan: 'Services', fasilitas: 'Facilities', jadwalDokter: 'Schedule', jadwal: 'Schedule', profil: 'Profile', tentangKami: 'Profile', kontak: 'Contact', heroTitle: 'Modern & Trusted Health Services', heroSubtitle: 'Your health is our priority. Find the best services and specialist doctors at RSU Meloy.', searchPlaceholder: 'Search Doctor or Service', buatJanji: 'Make an Appointment', lihatLayanan: 'View Services', ugd24Jam: '24/7 Emergency', dokterSpesialis: 'Specialist Doctors', fasilitasModern: 'Modern Facilities', kenapaMemilihKami: 'Why Choose Us?', kenapaSubtitle: 'We are committed to providing a superior healthcare experience.', profesionalTitle: 'Professional Team', profesionalDesc: 'Our doctors and medical staff are experienced and highly dedicated.', teknologiTitle: 'Advanced Technology', teknologiDesc: 'We use the latest medical equipment for accurate diagnosis.', kenyamananTitle: 'Patient Comfort', kenyamananDesc: 'Clean, safe, and comfortable facilities for your recovery process.', pusatKeunggulan: 'Our Centers of Excellence', footerTagline: 'Service Above Expectation', tautanCepat: 'Quick Links', ikutiKami: 'Follow Us', jadwalDokterTitle: 'Specialist Doctor Schedule', jadwalDokterSubtitle: 'Plan your visit by checking our doctor\'s schedule.', cariNamaDokter: 'Search Doctor Name', pilihSpesialisasi: 'Select Specialty', semua: 'All', dokterTidakDitemukan: 'No doctors found.', layananTitle: 'Comprehensive Medical Services', layananSubtitle: 'From emergency care to specialist treatment, we are ready to serve.', fasilitasTitle: 'Modern Facilities & Technology', fasilitasSubtitle: 'Designed to support accurate diagnosis and patient comfort.', tentangTitle: 'About RSU Meloy', tentangSubNav: 'Profile & History', mutuSubNav: 'Quality Policy', pencapaianSubNav: 'Achievements', kontakTitle: 'Contact Us', kontakSubtitle: 'We are here to help. Contact us or visit our location.', infoKontak: 'Contact Information', alamat: 'Address', telepon: 'Phone', email: 'Email', jamOperasional: 'Operating Hours', ugdText: 'WhatsApp Registration', kontakDarurat: 'Emergency Contact', selengkapnya: 'Learn More', waRegistration: 'Hello RSU Meloy, I would like to register for a doctor consultation.', artikelKesehatan: 'Health Articles',
         mitra: 'Our Partners',
         mitraKami: 'Our Trusted Partners',
         mitraSubtitle: 'We collaborate with leading companies and insurance providers to deliver the best services.',
+        lowonganKerja: 'Job Vacancies',
     }
 };
 
@@ -31,6 +33,7 @@ export const getNavItems = (t: (key: string) => string): NavItem[] => [
             { id: 'about/achievements', label: t('pencapaianSubNav') },
             { id: 'about/health-articles', label: t('artikelKesehatan') },
             { id: 'about/partners', label: t('mitra') },
+            { id: 'about/vacancies', label: t('lowonganKerja') },
         ]
     },
     { id: 'contact', label: t('kontak') },
