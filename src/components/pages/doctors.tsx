@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import SectionHeader from '@/components/common/section-header';
 import { useLocalization } from '@/hooks/use-localization';
-import { doctorsData } from '@/lib/data';
 import type { Doctor } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -13,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Calendar, User } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { handleSmartSearch } from '@/app/actions';
+import { getDoctors } from '@/app/admin/actions';
 import { useDebounce } from 'use-debounce';
 
 interface DoctorSchedulePageProps {
@@ -21,35 +21,69 @@ interface DoctorSchedulePageProps {
 
 export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSchedulePageProps) {
   const { t } = useLocalization();
+  const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [activeSpecialty, setActiveSpecialty] = useState('Semua');
   const [filteredDoctorIds, setFilteredDoctorIds] = useState<string[] | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
-  const specialties = useMemo(() => [t('semua'), ...new Set(doctorsData.map(doc => doc.specialty))], [t]);
-
-  const performSearch = useCallback(async (term: string) => {
-    if (!term) {
-        setFilteredDoctorIds(null);
+  useEffect(() => {
+    async function fetchDoctors() {
+      try {
+        const doctorsFromDb = await getDoctors();
+        setAllDoctors(doctorsFromDb);
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      } finally {
         setLoading(false);
-        return;
+      }
     }
-    setLoading(true);
-    const result = await handleSmartSearch(term);
-    setFilteredDoctorIds(result.results);
-    setLoading(false);
+    fetchDoctors();
   }, []);
 
+  const specialties = useMemo(() => {
+    return [t('semua'), ...new Set(allDoctors.map(doc => doc.specialty))];
+  }, [t, allDoctors]);
+
+  const performSearch = useCallback(async (term: string) => {
+    if (!term.trim()) {
+        setFilteredDoctorIds(null);
+        setSearchLoading(false);
+        return;
+    }
+    setSearchLoading(true);
+    try {
+      const result = await handleSmartSearch(term);
+      setFilteredDoctorIds(result.results);
+    } catch(error) {
+        console.error("Smart search failed:", error);
+        // Fallback to simple local search on error
+        const lowerCaseTerm = term.toLowerCase();
+        const fallbackResults = allDoctors.filter(d => 
+            d.name.toLowerCase().includes(lowerCaseTerm) ||
+            d.specialty.toLowerCase().includes(lowerCaseTerm)
+        ).map(d => d.id);
+        setFilteredDoctorIds(fallbackResults);
+    } finally {
+      setSearchLoading(false);
+    }
+  }, [allDoctors]);
+
   useEffect(() => {
-    performSearch(debouncedSearchTerm);
+    if (debouncedSearchTerm) {
+        performSearch(debouncedSearchTerm);
+    } else {
+        setFilteredDoctorIds(null);
+    }
   }, [debouncedSearchTerm, performSearch]);
   
   const displayedDoctors = useMemo(() => {
-    let doctors = doctorsData;
+    let doctors = allDoctors;
 
-    if (filteredDoctorIds) {
+    if (debouncedSearchTerm && filteredDoctorIds) {
       const idSet = new Set(filteredDoctorIds);
       doctors = doctors.filter(doc => idSet.has(doc.id));
     }
@@ -59,8 +93,9 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
     }
     
     return doctors;
-  }, [filteredDoctorIds, activeSpecialty, t]);
+  }, [allDoctors, debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t]);
 
+  const isSearching = searchLoading || (loading && !allDoctors.length);
 
   return (
     <div className="py-16 md:py-24 bg-background animate-fade-in min-h-[80vh]">
@@ -78,7 +113,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
               />
             </div>
             <div>
-              <Select value={activeSpecialty} onValueChange={setActiveSpecialty}>
+              <Select value={activeSpecialty} onValueChange={setActiveSpecialty} disabled={loading}>
                 <SelectTrigger className="text-base">
                   <SelectValue placeholder={t('pilihSpesialisasi')} />
                 </SelectTrigger>
@@ -91,7 +126,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
         </Card>
 
         <div className="space-y-4">
-          {loading ? (
+          {isSearching ? (
             Array.from({ length: 3 }).map((_, index) => (
               <Card key={index} className="flex items-center p-4">
                 <Skeleton className="h-24 w-24 rounded-full mr-4" />

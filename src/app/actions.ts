@@ -1,15 +1,18 @@
 'use server';
 
 import { smartSearch } from '@/ai/flows/smart-search';
-import { doctorsData, servicesData } from '@/lib/data';
+import { servicesData } from '@/lib/data';
+import { getDoctors } from '@/app/admin/actions';
 import type { Doctor } from '@/lib/types';
 
 export async function handleSmartSearch(query: string): Promise<{ correctedQuery: string; results: string[] }> {
+  const doctors = await getDoctors();
+  
   if (!query.trim()) {
-    return { correctedQuery: '', results: doctorsData.map(d => d.id) };
+    return { correctedQuery: '', results: doctors.map(d => d.id) };
   }
 
-  const doctorNames = doctorsData.map(d => d.name);
+  const doctorNames = doctors.map(d => d.name);
   const serviceNames = servicesData.map(s => s.name);
   const availableOptions = [...new Set([...doctorNames, ...serviceNames])];
 
@@ -17,7 +20,7 @@ export async function handleSmartSearch(query: string): Promise<{ correctedQuery
     const aiResponse = await smartSearch({ query, availableOptions });
     
     const matchedDoctorNames = new Set(aiResponse.results.filter(r => doctorNames.includes(r)));
-    const filteredDoctors = doctorsData.filter(d => matchedDoctorNames.has(d.name));
+    const filteredDoctors = doctors.filter(d => matchedDoctorNames.has(d.name));
     
     // If AI returns nothing, maybe do a fallback search
     if (filteredDoctors.length > 0) {
@@ -32,7 +35,7 @@ export async function handleSmartSearch(query: string): Promise<{ correctedQuery
 
   // Fallback to simple search if AI fails or returns no matches
   const lowerCaseQuery = query.toLowerCase();
-  const fallbackDoctors = doctorsData.filter(d => 
+  const fallbackDoctors = doctors.filter(d => 
       d.name.toLowerCase().includes(lowerCaseQuery) ||
       d.specialty.toLowerCase().includes(lowerCaseQuery)
   );
