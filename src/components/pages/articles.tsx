@@ -73,7 +73,6 @@ export default function ArticlesList() {
                 <div className="text-muted-foreground line-clamp-3 flex-1">{article.content}</div>
                  <CardFooter className="p-0 pt-6 mt-auto">
                     <Button variant="link" className="p-0" asChild>
-                        {/* Note: This should ideally link to a dynamic page like /articles/[id] */}
                         <Link href={`/about?page=health-articles`}>
                             Baca Selengkapnya <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
