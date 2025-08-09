@@ -73,14 +73,16 @@ export default function ContactPage() {
                     <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl font-headline">
                         {t('kontakTitle')}
                     </h1>
+                    <p className="mt-4 text-lg text-gray-200 md:text-xl">
+                        {t('kontakSubtitle')}
+                    </p>
                 </div>
             </div>
         </div>
 
       <div className="py-16 md:py-24">
         <div className="container px-4 md:px-6">
-            <SectionHeader subtitle={t('kontakSubtitle')} title="" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card>
                 <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-6 text-primary">{t('infoKontak')}</h3>
