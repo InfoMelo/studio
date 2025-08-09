@@ -1,9 +1,11 @@
 
 'use client';
-import { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar"
-import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users, Briefcase } from "lucide-react"
+import { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarHeader, SidebarFooter } from "@/components/ui/sidebar"
+import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users, Briefcase, LogOut } from "lucide-react"
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { logout } from "../login/actions";
 
 export default function AdminLayout({
   children,
@@ -11,6 +13,7 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const menuItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -22,10 +25,18 @@ export default function AdminLayout({
     { href: "/admin/vacancies", label: "Lowongan", icon: Briefcase },
   ];
 
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
+
   return (
     <SidebarProvider>
       <Sidebar>
-        <SidebarMenu>
+        <SidebarHeader>
+           <h1 className="text-xl font-bold p-2 group-data-[collapsible=icon]:hidden">Admin</h1>
+        </SidebarHeader>
+        <SidebarMenu className="flex-1">
           {menuItems.map((item) => (
              <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton asChild isActive={pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))}>
@@ -37,6 +48,16 @@ export default function AdminLayout({
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
+         <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton onClick={handleLogout}>
+                <LogOut />
+                <span>Logout</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <header className="flex items-center justify-between p-4 border-b">
