@@ -1,7 +1,7 @@
 
 'use client';
 import { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar"
-import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText } from "lucide-react"
+import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users } from "lucide-react"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -18,6 +18,7 @@ export default function AdminLayout({
     { href: "/admin/services", label: "Layanan", icon: HeartPulse },
     { href: "/admin/facilities", label: "Fasilitas", icon: Building },
     { href: "/admin/articles", label: "Artikel", icon: FileText },
+    { href: "/admin/partners", label: "Mitra", icon: Users },
   ];
 
   return (

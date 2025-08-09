@@ -4,7 +4,7 @@
 import { db } from '@/lib/firebase';
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, where, writeBatch, orderBy, Timestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
-import type { Doctor, Service, Facility, Article } from '@/lib/types';
+import type { Doctor, Service, Facility, Article, Partner } from '@/lib/types';
 import * as XLSX from 'xlsx';
 
 // Doctors Actions
@@ -235,4 +235,43 @@ export async function deleteArticle(docId: string) {
     await deleteDoc(articleRef);
     revalidatePath('/admin/articles');
     revalidatePath('/about');
+}
+
+
+// Partners Actions
+export async function getPartners(): Promise<Partner[]> {
+    const partnersCol = collection(db, 'partners');
+    const partnerSnapshot = await getDocs(partnersCol);
+    return partnerSnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Partner));
+}
+
+export async function getPartner(docId: string): Promise<Partner | null> {
+    const partnerRef = doc(db, 'partners', docId);
+    const partnerSnap = await getDoc(partnerRef);
+    if (partnerSnap.exists()) {
+        return { ...partnerSnap.data(), docId: partnerSnap.id } as Partner;
+    }
+    return null;
+}
+
+export async function addPartner(partner: Omit<Partner, 'id' | 'docId'>) {
+    const partnersCol = collection(db, 'partners');
+    const newPartner = { ...partner, id: new Date().getTime().toString() };
+    await addDoc(partnersCol, newPartner);
+    revalidatePath('/admin/partners');
+    revalidatePath('/');
+}
+
+export async function updatePartner(docId: string, partner: Partial<Partner>) {
+    const partnerRef = doc(db, 'partners', docId);
+    await updateDoc(partnerRef, partner);
+    revalidatePath('/admin/partners');
+    revalidatePath('/');
+}
+
+export async function deletePartner(docId: string) {
+    const partnerRef = doc(db, 'partners', docId);
+    await deleteDoc(partnerRef);
+    revalidatePath('/admin/partners');
+    revalidatePath('/');
 }

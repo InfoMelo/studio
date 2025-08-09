@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useLocalization } from '@/hooks/use-localization';
 import { quickAccessItems } from '@/lib/data';
-import { getServices } from '@/app/admin/actions';
+import { getServices, getPartners } from '@/app/admin/actions';
 import SectionHeader from '@/components/common/section-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +15,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
-import type { Service } from '@/lib/types';
+import type { Service, Partner } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const heroSlides = [
@@ -30,22 +30,15 @@ const whyUsItems = (t: (key: string) => string) => [
     { title: t('kenyamananTitle'), desc: t('kenyamananDesc'), imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754741672/lobi_y0el0x.jpg', aiHint: 'hospital lobby' },
 ];
 
-const partnerLogos = [
-    { name: 'Partner 1', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/logo-bpjs-kesehatan_x30abz.png', aiHint: 'bpjs kesehatan logo' },
-    { name: 'Partner 2', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/Jasa_Raharja_logo.svg_pgrfsv.png', aiHint: 'jasa raharja logo' },
-    { name: 'Partner 3', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/Logo_KPC_oyp4ku.png', aiHint: 'kpc logo' },
-    { name: 'Partner 4', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/pama-persada-nusantara-logo-E31EC4C152-seeklogo.com_z0kmvj.png', aiHint: 'pama logo' },
-    { name: 'Partner 5', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807493/1655273576182_a0q7cv.png', aiHint: 'thiess logo' },
-    { name: 'Partner 6', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/logo-pln_n0xrcp.png', aiHint: 'pln logo' },
-];
-
 export default function HomePage() {
   const { t } = useLocalization();
   const router = useRouter();
   const qai = quickAccessItems(t, (path: string) => router.push(path));
   const whyUs = whyUsItems(t);
   const [services, setServices] = useState<Service[]>([]);
+  const [partners, setPartners] = useState<Partner[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
+  const [loadingPartners, setLoadingPartners] = useState(true);
 
   useEffect(() => {
     async function fetchServices() {
@@ -58,7 +51,18 @@ export default function HomePage() {
             setLoadingServices(false);
         }
     }
+    async function fetchPartners() {
+        try {
+            const partnersFromDb = await getPartners();
+            setPartners(partnersFromDb);
+        } catch (error) {
+            console.error("Failed to fetch partners:", error);
+        } finally {
+            setLoadingPartners(false);
+        }
+    }
     fetchServices();
+    fetchPartners();
   }, []);
 
   return (
@@ -183,18 +187,26 @@ export default function HomePage() {
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('mitraKami')} subtitle={t('mitraSubtitle')} />
           <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-            {partnerLogos.map((partner) => (
-              <div key={partner.name} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
-                <Image
-                  src={partner.imageUrl}
-                  alt={partner.name}
-                  data-ai-hint={partner.aiHint}
-                  width={140}
-                  height={70}
-                  className="object-contain"
-                />
-              </div>
-            ))}
+            {loadingPartners ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                    <div key={index} className="flex justify-center">
+                        <Skeleton className="h-[70px] w-[140px]" />
+                    </div>
+                ))
+            ) : (
+                partners.map((partner) => (
+                <div key={partner.docId} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
+                    <Image
+                    src={partner.imageUrl}
+                    alt={partner.name}
+                    data-ai-hint={partner.aiHint}
+                    width={140}
+                    height={70}
+                    className="object-contain"
+                    />
+                </div>
+                ))
+            )}
           </div>
         </div>
       </section>

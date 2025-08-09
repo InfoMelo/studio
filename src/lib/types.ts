@@ -1,4 +1,5 @@
 
+
 import type { LucideIcon } from 'lucide-react';
 
 export interface NavItem {
@@ -50,6 +51,14 @@ export interface Article {
   imageUrl: string;
   aiHint: string;
   createdAt: string; // ISO string date
+  docId?: string;
+}
+
+export interface Partner {
+  id: string;
+  name: string;
+  imageUrl: string;
+  aiHint: string;
   docId?: string;
 }
 
