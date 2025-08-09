@@ -7,6 +7,7 @@ import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import * as LucideIcons from 'lucide-react';
 import ServiceActions from "./ServiceActions";
+import type { Service } from "@/lib/types";
 
 const Icon = ({ name, ...props }: { name: string } & LucideIcons.LucideProps) => {
   const LucideIcon = (LucideIcons as any)[name];
@@ -41,10 +42,10 @@ export default async function ManageServicesPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {services.map((service) => (
+                        {services.map((service: Service) => (
                             <TableRow key={service.docId}>
                                 <TableCell>
-                                    <Icon name={(service as any).iconName || 'HelpCircle'} className="h-6 w-6 text-primary" />
+                                    <Icon name={service.iconName || 'HelpCircle'} className="h-6 w-6 text-primary" />
                                 </TableCell>
                                 <TableCell className="font-medium">{service.name}</TableCell>
                                 <TableCell>{service.description}</TableCell>

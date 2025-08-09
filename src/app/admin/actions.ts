@@ -117,7 +117,7 @@ export async function getService(docId: string): Promise<Service | null> {
     return null;
 }
 
-export async function addService(service: Omit<Service, 'id' | 'docId' | 'icon'> & { iconName: string }) {
+export async function addService(service: Omit<Service, 'id' | 'docId'>) {
     const servicesCol = collection(db, 'services');
     const newService = { ...service, id: new Date().getTime().toString() };
     await addDoc(servicesCol, newService);
@@ -126,7 +126,7 @@ export async function addService(service: Omit<Service, 'id' | 'docId' | 'icon'>
     revalidatePath('/'); // For home page
 }
 
-export async function updateService(docId: string, service: Partial<Omit<Service, 'icon'>> & { iconName: string }) {
+export async function updateService(docId: string, service: Partial<Service>) {
     const serviceRef = doc(db, 'services', docId);
     await updateDoc(serviceRef, service);
     revalidatePath('/admin/services');

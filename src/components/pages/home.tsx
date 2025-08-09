@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -168,7 +169,7 @@ export default function HomePage() {
             ) : (
                 services.slice(0, 6).map(service => (
                 <Card key={service.docId} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
-                    <Icon name={(service as any).iconName || 'Heart'} className="h-12 w-12 text-primary mb-4" />
+                    <Icon name={service.iconName || 'Heart'} className="h-12 w-12 text-primary mb-4" />
                     <CardTitle className="mb-2 text-xl">{service.name}</CardTitle>
                     <CardDescription>{service.description}</CardDescription>
                 </Card>

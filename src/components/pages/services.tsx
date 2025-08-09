@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useLocalization } from '@/hooks/use-localization';
@@ -61,7 +62,7 @@ export default function ServicesPage() {
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                     <div className="p-4 bg-primary/10 rounded-full">
-                       <Icon name={(service as any).iconName || 'Heart'} className="h-10 w-10 text-primary" />
+                       <Icon name={service.iconName || 'Heart'} className="h-10 w-10 text-primary" />
                     </div>
                   </div>
                   <CardTitle>{service.name}</CardTitle>

@@ -1,3 +1,4 @@
+
 import type { LucideIcon } from 'lucide-react';
 
 export interface NavItem {
@@ -15,7 +16,7 @@ export interface Service {
   id: string;
   name: string;
   description: string;
-  icon: LucideIcon;
+  iconName: string;
   docId?: string;
 }
 

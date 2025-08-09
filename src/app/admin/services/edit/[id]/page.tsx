@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { allLucideIcons } from '@/lib/data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import type { Service } from '@/lib/types';
 
 const serviceFormSchema = z.object({
   name: z.string().min(2, { message: "Nama layanan harus diisi." }),
@@ -40,7 +41,7 @@ export default function EditServicePage() {
         if (docId) {
             getService(docId).then(service => {
                 if (service) {
-                    form.reset(service as any);
+                    form.reset(service);
                 } else {
                     toast({ variant: "destructive", title: "Gagal", description: "Data layanan tidak ditemukan." });
                     router.push('/admin/services');

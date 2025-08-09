@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { allLucideIcons } from '@/lib/data';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import type { Service } from '@/lib/types';
 
 const serviceFormSchema = z.object({
   name: z.string().min(2, { message: "Nama layanan harus diisi." }),
@@ -35,8 +36,9 @@ export default function NewServicePage() {
     });
 
     async function onSubmit(data: ServiceFormValues) {
+        const newService: Omit<Service, 'docId' | 'id'> = data;
         try {
-            await addService(data);
+            await addService(newService);
             toast({ title: "Sukses", description: "Layanan baru berhasil ditambahkan." });
             router.push('/admin/services');
         } catch (error) {
