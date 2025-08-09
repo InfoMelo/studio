@@ -9,10 +9,10 @@ export default function ServicesPage() {
   const { t } = useLocalization();
 
   return (
-    <div className="py-16 bg-secondary animate-fade-in">
+    <div className="py-16 md:py-24 bg-secondary animate-fade-in">
       <div className="container">
         <SectionHeader title={t('layananTitle')} subtitle={t('layananSubtitle')} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           {servicesData.map((service) => (
             <Card key={service.id} className="text-center hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
               <CardHeader>

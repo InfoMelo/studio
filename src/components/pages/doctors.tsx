@@ -63,11 +63,11 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
 
 
   return (
-    <div className="py-16 bg-secondary animate-fade-in min-h-[80vh]">
+    <div className="py-16 md:py-24 bg-background animate-fade-in min-h-[80vh]">
       <div className="container">
         <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
         
-        <Card className="p-4 md:p-6 mb-8">
+        <Card className="p-4 md:p-6 mb-8 mt-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
               <Input

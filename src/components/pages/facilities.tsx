@@ -10,10 +10,10 @@ export default function FacilitiesPage() {
   const { t } = useLocalization();
 
   return (
-    <div className="py-16 bg-secondary animate-fade-in">
+    <div className="py-16 md:py-24 bg-secondary animate-fade-in">
       <div className="container">
         <SectionHeader title={t('fasilitasTitle')} subtitle={t('fasilitasSubtitle')} />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
           {facilitiesData.map((facility) => (
             <Card key={facility.id} className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
               <CardHeader className="p-0">

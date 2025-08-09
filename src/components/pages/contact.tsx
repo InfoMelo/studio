@@ -16,13 +16,13 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="py-16 animate-fade-in">
+    <div className="py-16 md:py-24 animate-fade-in">
       <div className="container">
         <SectionHeader title={t('kontakTitle')} subtitle={t('kontakSubtitle')} />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
           <Card>
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold mb-6">{t('infoKontak')}</h3>
+              <h3 className="text-2xl font-bold mb-6 text-primary">{t('infoKontak')}</h3>
               <ul className="space-y-6">
                 {contactInfo.map((item, index) => (
                   <li key={index} className="flex items-start gap-4">

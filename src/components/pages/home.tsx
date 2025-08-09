@@ -39,7 +39,7 @@ export default function HomePage() {
         <CarouselContent>
           {heroSlides.map((slide, index) => (
             <CarouselItem key={index}>
-              <div className="h-[calc(100vh-80px)] w-full relative">
+              <div className="h-[calc(100vh-64px)] w-full relative">
                 <Image
                   src={slide.imageUrl}
                   alt={t(slide.titleKey)}
@@ -73,7 +73,7 @@ export default function HomePage() {
       </Carousel>
       
       {/* Quick Access Section */}
-      <div className="relative z-10 -mt-16 mb-16">
+      <section className="relative z-10 -mt-20 mb-20">
           <div className="container">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-background/80 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-lg border">
                   {qai.map((item, index) => (
@@ -93,14 +93,14 @@ export default function HomePage() {
                   ))}
               </div>
           </div>
-      </div>
+      </section>
 
 
       {/* Why Choose Us Section */}
-      <section className="py-16">
+      <section className="py-16 md:py-24">
         <div className="container">
           <SectionHeader title={t('kenapaMemilihKami')} subtitle={t('kenapaSubtitle')} />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             {whyUs.map((item, index) => (
               <Card key={index} className="overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
                 <CardHeader className="p-0">
@@ -124,10 +124,10 @@ export default function HomePage() {
       </section>
 
       {/* Centers of Excellence Section */}
-      <section className="py-16 bg-secondary">
+      <section className="py-16 md:py-24 bg-secondary">
         <div className="container">
           <SectionHeader title={t('pusatKeunggulan')} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             {servicesData.slice(0, 6).map(service => (
               <Card key={service.id} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
                 <service.icon className="h-12 w-12 text-primary mb-4" />
