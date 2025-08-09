@@ -54,7 +54,11 @@ export default function Footer() {
                   <WhatsAppIcon className="h-5 w-5" />
                 </a>
               </Button>
-              <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10"><Instagram className="h-5 w-5" /></Button>
+              <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10" asChild>
+                <a href="https://www.instagram.com/rsumeloy" target="_blank" rel="noopener noreferrer">
+                  <Instagram className="h-5 w-5" />
+                </a>
+              </Button>
             </div>
           </div>
 
