@@ -1,6 +1,7 @@
+
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import SectionHeader from '@/components/common/section-header';
 import { useLocalization } from '@/hooks/use-localization';
 import type { Doctor } from '@/lib/types';
@@ -10,7 +11,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Calendar, User } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { handleSmartSearch } from '@/app/actions';
-import { getDoctors } from '@/app/admin/actions';
 import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -19,32 +19,17 @@ import DownloadScheduleButton from './DownloadScheduleButton';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
+  doctors: Doctor[];
 }
 
-export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSchedulePageProps) {
+export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: allDoctors }: DoctorSchedulePageProps) {
   const { t } = useLocalization();
-  const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [activeSpecialty, setActiveSpecialty] = useState('Semua');
   const [filteredDoctorIds, setFilteredDoctorIds] = useState<string[] | null>(null);
-  const [loading, setLoading] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
 
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
-
-  useEffect(() => {
-    async function fetchDoctors() {
-      try {
-        const doctorsFromDb = await getDoctors();
-        setAllDoctors(doctorsFromDb);
-      } catch (error) {
-        console.error("Failed to fetch doctors:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchDoctors();
-  }, []);
 
   const specialties = useMemo(() => {
     return [t('semua'), ...new Set(allDoctors.map(doc => doc.specialty))];
@@ -62,7 +47,6 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
       setFilteredDoctorIds(result.results);
     } catch(error) {
         console.error("Smart search failed:", error);
-        // Fallback to simple local search on error
         const lowerCaseTerm = term.toLowerCase();
         const fallbackResults = allDoctors.filter(d => 
             d.name.toLowerCase().includes(lowerCaseTerm) ||
@@ -97,7 +81,6 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
     return doctors;
   }, [allDoctors, debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t]);
 
-  const isSearching = searchLoading || (loading && !allDoctors.length);
 
   const getTooltipContent = (doctor: Doctor) => {
     if (doctor.status === 'Tutup' && doctor.statusInfo) {
@@ -126,7 +109,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
                 />
               </div>
               <div>
-                <Select value={activeSpecialty} onValueChange={setActiveSpecialty} disabled={loading}>
+                <Select value={activeSpecialty} onValueChange={setActiveSpecialty}>
                   <SelectTrigger className="text-base">
                     <SelectValue placeholder={t('pilihSpesialisasi')} />
                   </SelectTrigger>
@@ -142,7 +125,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
           </Card>
 
           <div className="space-y-4">
-            {isSearching ? (
+            {searchLoading ? (
               Array.from({ length: 3 }).map((_, index) => (
                 <Card key={index} className="flex items-center p-4">
                   <Skeleton className="h-24 w-24 rounded-full mr-4" />

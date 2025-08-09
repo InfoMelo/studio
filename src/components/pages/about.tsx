@@ -8,9 +8,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import ArticlesList from './articles';
 import PartnersList from './partners';
 import VacanciesList from './vacancies';
+import type { Article, Partner, Vacancy } from '@/lib/types';
 
 interface AboutPageProps {
   subPage: string;
+  articles: Article[];
+  partners: Partner[];
+  vacancies: Vacancy[];
 }
 
 const ProfileContent = () => {
@@ -54,7 +58,7 @@ const DefaultContent = ({ title }: { title: string }) => (
     </Card>
 );
 
-export default function AboutPage({ subPage }: AboutPageProps) {
+export default function AboutPage({ subPage, articles, partners, vacancies }: AboutPageProps) {
   const { t } = useLocalization();
 
   const renderContent = () => {
@@ -66,11 +70,11 @@ export default function AboutPage({ subPage }: AboutPageProps) {
       case 'achievements':
         return <DefaultContent title={t('pencapaianSubNav')} />;
       case 'health-articles':
-        return <ArticlesList />;
+        return <ArticlesList articles={articles} />;
       case 'partners':
-        return <PartnersList />;
+        return <PartnersList partners={partners} />;
       case 'vacancies':
-        return <VacanciesList />;
+        return <VacanciesList vacancies={vacancies} />;
       default:
         return <ProfileContent />;
     }

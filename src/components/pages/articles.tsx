@@ -1,58 +1,22 @@
 
-'use client';
-
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getArticles } from '@/app/admin/actions';
 import type { Article } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
-export default function ArticlesList() {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
+interface ArticlesListProps {
+  articles: Article[];
+}
 
-  useEffect(() => {
-    async function fetchArticles() {
-      try {
-        const articlesFromDb = await getArticles();
-        setArticles(articlesFromDb);
-      } catch (error) {
-        console.error("Failed to fetch articles:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchArticles();
-  }, []);
-
+export default function ArticlesList({ articles }: ArticlesListProps) {
   return (
     <div className="mt-12">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {loading ? (
-          Array.from({ length: 3 }).map((_, index) => (
-            <Card key={index} className="overflow-hidden">
-              <Skeleton className="h-56 w-full" />
-              <CardHeader>
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-1/2 mt-2" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full mt-2" />
-                <Skeleton className="h-4 w-5/6 mt-2" />
-              </CardContent>
-              <CardFooter>
-                 <Skeleton className="h-8 w-28" />
-              </CardFooter>
-            </Card>
-          ))
-        ) : articles.length > 0 ? (
+        {articles.length > 0 ? (
           articles.map((article) => (
             <Card key={article.docId} className="flex flex-col overflow-hidden transition-shadow hover:shadow-xl">
               <CardHeader className="p-0">

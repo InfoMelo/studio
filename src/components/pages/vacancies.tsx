@@ -1,63 +1,25 @@
 
-'use client';
-
-import { useEffect, useState } from 'react';
-import { getVacancies } from '@/app/admin/actions';
 import type { Vacancy } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { MapPin, Clock, Calendar, Briefcase } from 'lucide-react';
+import { MapPin, Briefcase, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import SectionHeader from '../common/section-header';
 import { useLocalization } from '@/hooks/use-localization';
 
-export default function VacanciesList() {
-  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { t } = useLocalization();
+interface VacanciesListProps {
+  vacancies: Vacancy[];
+}
 
-  useEffect(() => {
-    async function fetchVacancies() {
-      try {
-        const vacanciesFromDb = await getVacancies();
-        setVacancies(vacanciesFromDb);
-      } catch (error) {
-        console.error("Failed to fetch vacancies:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchVacancies();
-  }, []);
+export default function VacanciesList({ vacancies }: VacanciesListProps) {
+  const { t } = useLocalization();
 
   return (
     <div className="mt-12">
         <SectionHeader title={t('lowonganKerja')} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        {loading ? (
-          Array.from({ length: 2 }).map((_, index) => (
-            <Card key={index} className="overflow-hidden">
-              <CardHeader>
-                <Skeleton className="h-7 w-3/4" />
-                <div className='flex gap-4 pt-2'>
-                    <Skeleton className="h-5 w-1/4" />
-                    <Skeleton className="h-5 w-1/4" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full mt-2" />
-                <Skeleton className="h-4 w-5/6 mt-2" />
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                 <Skeleton className="h-6 w-1/3" />
-                 <Skeleton className="h-9 w-28" />
-              </CardFooter>
-            </Card>
-          ))
-        ) : vacancies.length > 0 ? (
+        {vacancies.length > 0 ? (
           vacancies.map((vacancy) => (
             <Card key={vacancy.docId} className="flex flex-col overflow-hidden transition-shadow hover:shadow-xl">
               <CardHeader>
