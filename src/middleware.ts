@@ -4,6 +4,9 @@ import type { NextRequest } from 'next/server';
 import { getIronSession } from 'iron-session';
 import { Session, sessionOptions } from '@/lib/session';
 
+// This is required for environment variables to be available in the middleware
+import 'dotenv/config';
+
 export async function middleware(request: NextRequest) {
   const session = await getIronSession<Session>(request.cookies, sessionOptions);
 
