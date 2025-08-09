@@ -7,8 +7,7 @@ export interface Session {
   isLoggedIn?: boolean;
 }
 
-export const sessionOptions: SessionOptions = {
-  password: process.env.SECRET_COOKIE_PASSWORD as string,
+export const sessionOptions: Omit<SessionOptions, 'password'> = {
   cookieName: 'rsu-meloy-session',
   cookieOptions: {
     // secure: true should be used in production (HTTPS)
