@@ -1,20 +1,20 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import Image from 'next/image';
 import SectionHeader from '@/components/common/section-header';
 import { useLocalization } from '@/hooks/use-localization';
 import type { Doctor } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Calendar, User } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { handleSmartSearch } from '@/app/actions';
 import { getDoctors } from '@/app/admin/actions';
 import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
@@ -99,79 +99,88 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
   const isSearching = searchLoading || (loading && !allDoctors.length);
 
   return (
-    <div className="py-16 md:py-24 bg-background animate-fade-in min-h-[80vh]">
-      <div className="container px-4 md:px-6">
-        <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
-        
-        <Card className="p-4 md:p-6 mb-8 mt-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <Input
-                placeholder={t('cariNamaDokter')}
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                className="text-base"
-              />
+    <TooltipProvider>
+      <div className="py-16 md:py-24 bg-background animate-fade-in min-h-[80vh]">
+        <div className="container px-4 md:px-6">
+          <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
+          
+          <Card className="p-4 md:p-6 mb-8 mt-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="md:col-span-2">
+                <Input
+                  placeholder={t('cariNamaDokter')}
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className="text-base"
+                />
+              </div>
+              <div>
+                <Select value={activeSpecialty} onValueChange={setActiveSpecialty} disabled={loading}>
+                  <SelectTrigger className="text-base">
+                    <SelectValue placeholder={t('pilihSpesialisasi')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {specialties.map(spec => <SelectItem key={spec} value={spec}>{spec}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div>
-              <Select value={activeSpecialty} onValueChange={setActiveSpecialty} disabled={loading}>
-                <SelectTrigger className="text-base">
-                  <SelectValue placeholder={t('pilihSpesialisasi')} />
-                </SelectTrigger>
-                <SelectContent>
-                  {specialties.map(spec => <SelectItem key={spec} value={spec}>{spec}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <div className="space-y-4">
-          {isSearching ? (
-            Array.from({ length: 3 }).map((_, index) => (
-              <Card key={index} className="flex items-center p-4">
-                <Skeleton className="h-24 w-24 rounded-full mr-4" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-6 w-1/2" />
-                  <Skeleton className="h-4 w-1/3" />
-                  <Skeleton className="h-4 w-2/3" />
-                </div>
-              </Card>
-            ))
-          ) : displayedDoctors.length > 0 ? (
-            displayedDoctors.map((doc: Doctor) => (
-              <Card key={doc.id} className="transition-shadow hover:shadow-lg">
-                <CardContent className="p-4 md:p-6 flex items-start gap-4 md:gap-6">
-                  <Avatar className="h-24 w-24 border-2 border-primary flex-shrink-0">
-                    <AvatarFallback>
-                      <User className="h-12 w-12 text-muted-foreground" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <h3 className="text-xl font-bold text-gray-900">{doc.name}</h3>
-                            <p className="text-primary font-semibold mb-3">{doc.specialty}</p>
-                        </div>
-                        <Badge variant={doc.status === 'Praktek' ? 'default' : 'destructive'} className={`${doc.status === 'Praktek' ? 'bg-green-600' : ''} text-white`}>
-                            {doc.status}
-                        </Badge>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                      <Calendar className="h-4 w-4 text-primary" />
-                      <span>{doc.schedule}</span>
-                    </div>
+          <div className="space-y-4">
+            {isSearching ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <Card key={index} className="flex items-center p-4">
+                  <Skeleton className="h-24 w-24 rounded-full mr-4" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-6 w-1/2" />
+                    <Skeleton className="h-4 w-1/3" />
+                    <Skeleton className="h-4 w-2/3" />
                   </div>
-                </CardContent>
+                </Card>
+              ))
+            ) : displayedDoctors.length > 0 ? (
+              displayedDoctors.map((doc: Doctor) => (
+                <Card key={doc.id} className="transition-shadow hover:shadow-lg">
+                  <CardContent className="p-4 md:p-6 flex items-start gap-4 md:gap-6">
+                    <Avatar className="h-24 w-24 border-2 border-primary flex-shrink-0">
+                      <AvatarFallback>
+                        <User className="h-12 w-12 text-muted-foreground" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start">
+                          <div>
+                              <h3 className="text-xl font-bold text-gray-900">{doc.name}</h3>
+                              <p className="text-primary font-semibold mb-3">{doc.specialty}</p>
+                          </div>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Badge variant={doc.status === 'Praktek' ? 'default' : 'destructive'} className={`${doc.status === 'Praktek' ? 'bg-green-600' : ''} text-white`}>
+                                  {doc.status}
+                              </Badge>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{doc.status === 'Praktek' ? 'Dokter sedang membuka praktek sesuai jadwal.' : 'Dokter tidak membuka praktek saat ini.'}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <span>{doc.schedule}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Card className="p-12 text-center text-muted-foreground">
+                {t('dokterTidakDitemukan')}
               </Card>
-            ))
-          ) : (
-            <Card className="p-12 text-center text-muted-foreground">
-              {t('dokterTidakDitemukan')}
-            </Card>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }
