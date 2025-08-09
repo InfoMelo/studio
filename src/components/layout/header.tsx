@@ -37,6 +37,10 @@ export default function Header() {
     }
   }
 
+  const getLinkHref = (id: string) => {
+    return id === 'home' ? '/' : `/${id}`;
+  };
+
   return (
     <>
       <TopBar />
@@ -75,7 +79,7 @@ export default function Header() {
                 </DropdownMenu>
               ) : (
                 <Button key={item.id} variant="ghost" asChild>
-                  <Link href={`/${item.id}`}>{item.label}</Link>
+                  <Link href={getLinkHref(item.id)}>{item.label}</Link>
                 </Button>
               )
             )}
@@ -115,7 +119,7 @@ export default function Header() {
                         </AccordionItem>
                       ) : (
                         <SheetClose asChild key={item.id}>
-                           <Link href={`/${item.id}`} passHref>
+                           <Link href={getLinkHref(item.id)} passHref>
                             <Button
                                 variant="ghost"
                                 className="w-full justify-start font-semibold py-6 text-base"
