@@ -1,12 +1,50 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Suspense } from 'react';
 
+const APP_NAME = "RSU Meloy";
+const APP_DESCRIPTION = "Layanan Kesehatan Modern & Terpercaya oleh RSU Meloy. Kesehatan Anda adalah prioritas kami. Temukan layanan dan dokter spesialis terbaik.";
+
 export const metadata: Metadata = {
-  title: 'MediGuide',
-  description: 'Modern & Trusted Health Services by RSU Meloy',
+  applicationName: APP_NAME,
+  title: {
+    default: `${APP_NAME} - Kesehatan Anda, Prioritas Kami`,
+    template: `%s | ${APP_NAME}`,
+  },
+  description: APP_DESCRIPTION,
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: APP_NAME,
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: APP_NAME,
+    title: {
+      default: APP_NAME,
+      template: `%s | ${APP_NAME}`,
+    },
+    description: APP_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: {
+      default: APP_NAME,
+      template: `%s | ${APP_NAME}`,
+    },
+    description: APP_DESCRIPTION,
+  },
 };
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
+};
+
 
 export default function RootLayout({
   children,

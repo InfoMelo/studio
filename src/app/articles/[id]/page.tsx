@@ -1,4 +1,3 @@
-
 import { getArticle } from '@/app/admin/actions';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -8,6 +7,50 @@ import { Calendar, User } from 'lucide-react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { LanguageProvider } from '@/contexts/language-context';
+import type { Metadata } from 'next';
+import type { Article } from '@/lib/types';
+
+type Props = {
+  params: { id: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const article: Article | null = await getArticle(params.id);
+
+  if (!article) {
+    return {
+      title: "Artikel Tidak Ditemukan",
+      description: "Artikel yang Anda cari tidak tersedia.",
+    }
+  }
+
+  return {
+    title: article.title,
+    description: article.content.substring(0, 155) + '...', // First 155 chars
+    openGraph: {
+      title: article.title,
+      description: article.content.substring(0, 155) + '...',
+      type: 'article',
+      publishedTime: article.createdAt,
+      authors: [article.author],
+      images: [
+        {
+          url: article.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.content.substring(0, 155) + '...',
+      images: [article.imageUrl],
+    },
+  }
+}
+
 
 export default async function ArticleDetailPage({ params }: { params: { id: string } }) {
   const article = await getArticle(params.id);
