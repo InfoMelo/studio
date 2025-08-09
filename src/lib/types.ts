@@ -81,3 +81,11 @@ export interface Translation {
 export interface Translations {
   [lang: string]: Translation;
 }
+
+// Session
+export interface Session {
+    uid: string;
+    email: string;
+    picture?: string;
+    name?: string;
+}
