@@ -55,6 +55,8 @@ export default function AboutPage({ subPage }: AboutPageProps) {
         return <DefaultContent title={t('mutuSubNav')} />;
       case 'achievements':
         return <DefaultContent title={t('pencapaianSubNav')} />;
+      case 'health-articles':
+        return <DefaultContent title={t('artikelKesehatan')} />;
       default:
         return <ProfileContent />;
     }
