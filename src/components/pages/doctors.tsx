@@ -7,7 +7,7 @@ import { useLocalization } from '@/hooks/use-localization';
 import type { Doctor } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Calendar, User } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -139,23 +139,23 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
             ))
           ) : displayedDoctors.length > 0 ? (
             displayedDoctors.map((doc: Doctor) => (
-              <Card key={doc.id} className="flex flex-col md:flex-row items-center p-4 md:p-6 transition-shadow hover:shadow-md">
-                <Avatar className="h-24 w-24 mb-4 md:mb-0 md:mr-6 border-2 border-primary">
-                  <AvatarImage src={doc.imageUrl} alt={doc.name} data-ai-hint={doc.aiHint} />
-                  <AvatarFallback>
-                    <User className="h-12 w-12 text-muted-foreground" />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-xl font-bold">{doc.name}</h3>
-                  <p className="text-primary font-semibold mb-2">{doc.specialty}</p>
-                </div>
-                <div className="mt-4 md:mt-0 md:text-right">
-                    <div className="flex items-center justify-center md:justify-end gap-2 text-muted-foreground font-medium bg-secondary p-2 rounded-md">
-                        <Calendar className="h-5 w-5 text-primary" />
-                        <span>{doc.schedule}</span>
+              <Card key={doc.id} className="transition-shadow hover:shadow-lg">
+                <CardContent className="p-4 md:p-6 flex items-start gap-4 md:gap-6">
+                  <Avatar className="h-24 w-24 border-2 border-primary flex-shrink-0">
+                    <AvatarImage src={doc.imageUrl} alt={doc.name} data-ai-hint={doc.aiHint} />
+                    <AvatarFallback>
+                      <User className="h-12 w-12 text-muted-foreground" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900">{doc.name}</h3>
+                    <p className="text-primary font-semibold mb-3">{doc.specialty}</p>
+                    <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                      <Calendar className="h-4 w-4 text-primary" />
+                      <span>{doc.schedule}</span>
                     </div>
-                </div>
+                  </div>
+                </CardContent>
               </Card>
             ))
           ) : (
