@@ -39,7 +39,7 @@ export default function HomePage() {
         <CarouselContent>
           {heroSlides.map((slide, index) => (
             <CarouselItem key={index}>
-              <div className="h-[calc(100vh-64px)] w-full relative">
+              <div className="h-[calc(100vh-104px)] w-full relative">
                 <Image
                   src={slide.imageUrl}
                   alt={t(slide.titleKey)}
@@ -73,9 +73,9 @@ export default function HomePage() {
       </Carousel>
       
       {/* Quick Access Section */}
-      <section className="relative z-10 -mt-20 mb-20">
+      <section className="py-16 md:py-24">
           <div className="container">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-background/80 backdrop-blur-sm p-4 md:p-6 rounded-2xl shadow-lg border">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-background p-4 md:p-6 rounded-2xl shadow-lg border -mt-40 relative z-10 backdrop-blur-sm bg-background/80">
                   {qai.map((item, index) => (
                       <div
                           key={index}
@@ -97,7 +97,7 @@ export default function HomePage() {
 
 
       {/* Why Choose Us Section */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 pt-0">
         <div className="container">
           <SectionHeader title={t('kenapaMemilihKami')} subtitle={t('kenapaSubtitle')} />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
