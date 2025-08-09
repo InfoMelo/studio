@@ -4,7 +4,6 @@ import { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarMenu, Si
 import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users, Briefcase, LogOut } from "lucide-react"
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { logout } from "../login/actions";
 
 export default function AdminLayout({
