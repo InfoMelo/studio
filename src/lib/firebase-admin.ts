@@ -1,6 +1,5 @@
 
 import * as admin from 'firebase-admin';
-import 'dotenv/config';
 
 // This is a critical security measure.
 // The service account key should NEVER be exposed to the client.
