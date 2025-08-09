@@ -26,7 +26,11 @@ export default function Footer() {
             </Link>
             <p className="text-sm text-primary-foreground/80">{t('footerTagline')}</p>
             <div className="flex space-x-2">
-              <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10"><Facebook className="h-5 w-5" /></Button>
+              <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10" asChild>
+                <a href="https://www.facebook.com/rsumeloy" target="_blank" rel="noopener noreferrer">
+                  <Facebook className="h-5 w-5" />
+                </a>
+              </Button>
               <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10"><Twitter className="h-5 w-5" /></Button>
               <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10"><Instagram className="h-5 w-5" /></Button>
             </div>
