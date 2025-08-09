@@ -36,24 +36,26 @@ export default function DownloadScheduleButton({ doctors, specialty }: DownloadS
         });
 
         const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-        
-        let heightLeft = imgHeight;
-        let position = 0;
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const ratio = canvasWidth / canvasHeight;
 
-        // Add the first page
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-        heightLeft -= pageHeight;
+        let imgWidth = pdfWidth;
+        let imgHeight = imgWidth / ratio;
 
-        // Add new pages if content is longer than one page
-        while (heightLeft > 0) {
-            position = heightLeft - imgHeight;
-            pdf.addPage();
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pageHeight;
+        // If the calculated height is greater than the page height,
+        // scale it down to fit the page height.
+        if (imgHeight > pdfHeight) {
+            imgHeight = pdfHeight;
+            imgWidth = imgHeight * ratio;
         }
         
+        // Center the image on the page
+        const x = (pdfWidth - imgWidth) / 2;
+        const y = (pdfHeight - imgHeight) / 2;
+
+        pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
         pdf.save(`jadwal-dokter-${specialty.toLowerCase().replace(/ /g, '-')}.pdf`);
 
     } catch (error) {
