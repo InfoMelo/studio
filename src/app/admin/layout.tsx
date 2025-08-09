@@ -25,7 +25,7 @@ export default function AdminLayout({
         <SidebarMenu>
           {menuItems.map((item) => (
              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton asChild isActive={pathname === item.href}>
+                <SidebarMenuButton asChild isActive={pathname.startsWith(item.href) && (item.href !== '/admin' || pathname === '/admin')}>
                   <Link href={item.href}>
                     <item.icon />
                     <span>{item.label}</span>

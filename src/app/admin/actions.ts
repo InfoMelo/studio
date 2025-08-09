@@ -101,4 +101,81 @@ export async function bulkAddDoctors(fileBase64: string): Promise<{ success: boo
   }
 }
 
-// TODO: Implement actions for Services and Facilities
+// Services Actions
+export async function getServices(): Promise<Service[]> {
+    const servicesCol = collection(db, 'services');
+    const serviceSnapshot = await getDocs(servicesCol);
+    return serviceSnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Service));
+}
+
+export async function getService(docId: string): Promise<Service | null> {
+    const serviceRef = doc(db, 'services', docId);
+    const serviceSnap = await getDoc(serviceRef);
+    if (serviceSnap.exists()) {
+        return { ...serviceSnap.data(), docId: serviceSnap.id } as Service;
+    }
+    return null;
+}
+
+export async function addService(service: Omit<Service, 'id' | 'docId' | 'icon'> & { iconName: string }) {
+    const servicesCol = collection(db, 'services');
+    const newService = { ...service, id: new Date().getTime().toString() };
+    await addDoc(servicesCol, newService);
+    revalidatePath('/admin/services');
+    revalidatePath('/services');
+    revalidatePath('/'); // For home page
+}
+
+export async function updateService(docId: string, service: Partial<Omit<Service, 'icon'>> & { iconName: string }) {
+    const serviceRef = doc(db, 'services', docId);
+    await updateDoc(serviceRef, service);
+    revalidatePath('/admin/services');
+    revalidatePath('/services');
+    revalidatePath('/'); // For home page
+}
+
+export async function deleteService(docId: string) {
+    const serviceRef = doc(db, 'services', docId);
+    await deleteDoc(serviceRef);
+    revalidatePath('/admin/services');
+    revalidatePath('/services');
+    revalidatePath('/'); // For home page
+}
+
+// Facilities Actions
+export async function getFacilities(): Promise<Facility[]> {
+    const facilitiesCol = collection(db, 'facilities');
+    const facilitySnapshot = await getDocs(facilitiesCol);
+    return facilitySnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Facility));
+}
+
+export async function getFacility(docId: string): Promise<Facility | null> {
+    const facilityRef = doc(db, 'facilities', docId);
+    const facilitySnap = await getDoc(facilityRef);
+    if (facilitySnap.exists()) {
+        return { ...facilitySnap.data(), docId: facilitySnap.id } as Facility;
+    }
+    return null;
+}
+
+export async function addFacility(facility: Omit<Facility, 'id' | 'docId'>) {
+    const facilitiesCol = collection(db, 'facilities');
+    const newFacility = { ...facility, id: new Date().getTime().toString() };
+    await addDoc(facilitiesCol, newFacility);
+    revalidatePath('/admin/facilities');
+    revalidatePath('/facilities');
+}
+
+export async function updateFacility(docId: string, facility: Partial<Facility>) {
+    const facilityRef = doc(db, 'facilities', docId);
+    await updateDoc(facilityRef, facility);
+    revalidatePath('/admin/facilities');
+    revalidatePath('/facilities');
+}
+
+export async function deleteFacility(docId: string) {
+    const facilityRef = doc(db, 'facilities', docId);
+    await deleteDoc(facilityRef);
+    revalidatePath('/admin/facilities');
+    revalidatePath('/facilities');
+}

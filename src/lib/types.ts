@@ -16,6 +16,7 @@ export interface Service {
   name: string;
   description: string;
   icon: LucideIcon;
+  docId?: string;
 }
 
 export interface Facility {
@@ -24,6 +25,7 @@ export interface Facility {
   description: string;
   imageUrl: string;
   aiHint: string;
+  docId?: string;
 }
 
 export interface Doctor {

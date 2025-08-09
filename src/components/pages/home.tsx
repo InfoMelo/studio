@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocalization } from '@/hooks/use-localization';
-import { servicesData, quickAccessItems } from '@/lib/data';
+import { quickAccessItems } from '@/lib/data';
+import { getServices } from '@/app/admin/actions';
 import SectionHeader from '@/components/common/section-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +14,18 @@ import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
+import type { Service } from '@/lib/types';
+import * as LucideIcons from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const Icon = ({ name, ...props }: { name: string } & LucideIcons.LucideProps) => {
+  const LucideIcon = (LucideIcons as any)[name];
+  if (!LucideIcon) {
+    return <LucideIcons.HelpCircle {...props} />;
+  }
+  return <LucideIcon {...props} />;
+};
+
 
 const heroSlides = [
     { imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754703385/20200808_105509_qv8pvr.jpg', titleKey: 'heroTitle', subtitleKey: 'heroSubtitle', aiHint: 'hospital exterior' },
@@ -31,6 +44,22 @@ export default function HomePage() {
   const router = useRouter();
   const qai = quickAccessItems(t, (path: string) => router.push(path));
   const whyUs = whyUsItems(t);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+
+  useEffect(() => {
+    async function fetchServices() {
+        try {
+            const servicesFromDb = await getServices();
+            setServices(servicesFromDb);
+        } catch (error) {
+            console.error("Failed to fetch services:", error);
+        } finally {
+            setLoadingServices(false);
+        }
+    }
+    fetchServices();
+  }, []);
 
   return (
     <div className="animate-fade-in">
@@ -128,13 +157,23 @@ export default function HomePage() {
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('pusatKeunggulan')} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {servicesData.slice(0, 6).map(service => (
-              <Card key={service.id} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
-                <service.icon className="h-12 w-12 text-primary mb-4" />
-                <CardTitle className="mb-2 text-xl">{service.name}</CardTitle>
-                <CardDescription>{service.description}</CardDescription>
-              </Card>
-            ))}
+            {loadingServices ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                    <Card key={index} className="text-center flex flex-col items-center justify-start p-6">
+                        <Skeleton className="h-12 w-12 rounded-full mb-4" />
+                        <Skeleton className="h-6 w-3/4 mb-2" />
+                        <Skeleton className="h-4 w-full" />
+                    </Card>
+                ))
+            ) : (
+                services.slice(0, 6).map(service => (
+                <Card key={service.docId} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
+                    <Icon name={(service as any).iconName || 'Heart'} className="h-12 w-12 text-primary mb-4" />
+                    <CardTitle className="mb-2 text-xl">{service.name}</CardTitle>
+                    <CardDescription>{service.description}</CardDescription>
+                </Card>
+                ))
+            )}
           </div>
         </div>
       </section>
