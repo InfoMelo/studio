@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -14,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { createSessionCookie } from './actions';
-import { AlertCircle, LogIn } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 import Image from 'next/image';
 
 const loginFormSchema = z.object({
@@ -37,26 +36,38 @@ export default function LoginPage() {
   async function onSubmit(data: LoginFormValues) {
     setLoading(true);
     try {
+      // 1. Sign in with client-side SDK
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       const idToken = await userCredential.user.getIdToken();
       
+      // 2. Send token to server to create session cookie
       const sessionResult = await createSessionCookie(idToken);
 
       if (sessionResult.success) {
         toast({ title: "Login Berhasil", description: "Anda akan diarahkan ke dashboard." });
-        // Redirect menggunakan window.location.href untuk memastikan reload penuh
-        // dan middleware dapat mendeteksi cookie sesi yang baru
+        // Use window.location.href for a full page reload to ensure middleware picks up the new session
         window.location.href = '/admin';
       } else {
+        // This will be triggered if the server action fails
         throw new Error(sessionResult.error || "Gagal membuat sesi di server.");
       }
     } catch (error: any) {
       console.error("Login failed:", error);
       let errorMessage = "Terjadi kesalahan saat login.";
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-        errorMessage = "Email atau password yang Anda masukkan salah.";
-      } else if (error.message.includes("incorrect 'aud' (audience) claim")) {
-        errorMessage = "Konfigurasi proyek Firebase tidak cocok. Hubungi administrator.";
+      // Handle specific Firebase Auth errors
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/invalid-credential':
+          case 'auth/wrong-password':
+          case 'auth/user-not-found':
+            errorMessage = "Email atau password yang Anda masukkan salah.";
+            break;
+          default:
+            errorMessage = error.message;
+        }
+      } else {
+        // Handle errors from our server action
+        errorMessage = error.message;
       }
 
       toast({

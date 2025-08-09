@@ -1,9 +1,7 @@
-
 'use server';
 
 import { admin } from '@/lib/firebase-admin';
 import { cookies } from 'next/headers';
-import { NextRequest } from 'next/server';
 
 export async function createSessionCookie(
   idToken: string
@@ -16,16 +14,16 @@ export async function createSessionCookie(
       
     cookies().set('firebase-session', sessionCookie, {
       httpOnly: true,
-      secure: true, // Selalu set secure ke true untuk keamanan
+      secure: true,
       maxAge: expiresIn,
       path: '/',
     });
 
     return { success: true };
   } catch (error: any) {
-    console.error('Error creating session cookie:', error);
-    // Mengembalikan pesan error yang lebih spesifik jika ada
-    return { success: false, error: error.message || 'Failed to create session.' };
+    console.error('Error creating session cookie:', error.message);
+    // Return a specific error message to the client
+    return { success: false, error: `Gagal membuat sesi di server: ${error.message}` };
   }
 }
 

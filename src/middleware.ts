@@ -6,12 +6,12 @@ export async function middleware(request: NextRequest) {
   const session = request.cookies.get('firebase-session');
   const { pathname } = request.nextUrl;
 
-  // Jika tidak ada sesi dan mencoba mengakses halaman admin, redirect ke login
+  // If no session and trying to access an admin page, redirect to login
   if (!session && pathname.startsWith('/admin')) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // Jika ada sesi dan mencoba mengakses halaman login, redirect ke dashboard admin
+  // If there is a session and trying to access the login page, redirect to admin dashboard
   if (session && pathname === '/login') {
     return NextResponse.redirect(new URL('/admin', request.url));
   }
