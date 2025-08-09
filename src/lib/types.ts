@@ -42,6 +42,17 @@ export interface Doctor {
   docId?: string;
 }
 
+export interface Article {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  imageUrl: string;
+  aiHint: string;
+  createdAt: string; // ISO string date
+  docId?: string;
+}
+
 export interface Translation {
   [key: string]: string;
 }

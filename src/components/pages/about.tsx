@@ -1,9 +1,11 @@
+
 'use client';
 
 import Image from 'next/image';
 import { useLocalization } from '@/hooks/use-localization';
 import SectionHeader from '@/components/common/section-header';
 import { Card, CardContent } from '@/components/ui/card';
+import ArticlesList from './articles';
 
 interface AboutPageProps {
   subPage: string;
@@ -62,7 +64,7 @@ export default function AboutPage({ subPage }: AboutPageProps) {
       case 'achievements':
         return <DefaultContent title={t('pencapaianSubNav')} />;
       case 'health-articles':
-        return <DefaultContent title={t('artikelKesehatan')} />;
+        return <ArticlesList />;
       default:
         return <ProfileContent />;
     }

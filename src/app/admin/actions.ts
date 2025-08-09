@@ -2,9 +2,9 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, where, writeBatch } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, where, writeBatch, orderBy, Timestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
-import type { Doctor, Service, Facility } from '@/lib/types';
+import type { Doctor, Service, Facility, Article } from '@/lib/types';
 import * as XLSX from 'xlsx';
 
 // Doctors Actions
@@ -178,4 +178,61 @@ export async function deleteFacility(docId: string) {
     await deleteDoc(facilityRef);
     revalidatePath('/admin/facilities');
     revalidatePath('/facilities');
+}
+
+// Articles Actions
+export async function getArticles(): Promise<Article[]> {
+    const articlesCol = collection(db, 'articles');
+    const q = query(articlesCol, orderBy('createdAt', 'desc'));
+    const articleSnapshot = await getDocs(q);
+    const articleList = articleSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return { 
+            ...data,
+            docId: doc.id,
+            createdAt: (data.createdAt as Timestamp).toDate().toISOString() 
+        } as Article;
+    });
+    return articleList;
+}
+
+export async function getArticle(docId: string): Promise<Article | null> {
+    const articleRef = doc(db, 'articles', docId);
+    const articleSnap = await getDoc(articleRef);
+    if (articleSnap.exists()) {
+        const data = articleSnap.data();
+        return { 
+            ...data, 
+            docId: articleSnap.id,
+            createdAt: (data.createdAt as Timestamp).toDate().toISOString() 
+        } as Article;
+    }
+    return null;
+}
+
+export async function addArticle(article: Omit<Article, 'id' | 'docId' | 'createdAt'>) {
+    const articlesCol = collection(db, 'articles');
+    const newArticle = { 
+        ...article, 
+        id: new Date().getTime().toString(),
+        createdAt: Timestamp.now()
+    };
+    await addDoc(articlesCol, newArticle);
+    revalidatePath('/admin/articles');
+    revalidatePath('/about');
+}
+
+export async function updateArticle(docId: string, article: Partial<Omit<Article, 'id' | 'docId' | 'createdAt'>>) {
+    const articleRef = doc(db, 'articles', docId);
+    await updateDoc(articleRef, article);
+    revalidatePath('/admin/articles');
+    revalidatePath(`/admin/articles/edit/${docId}`);
+    revalidatePath('/about');
+}
+
+export async function deleteArticle(docId: string) {
+    const articleRef = doc(db, 'articles', docId);
+    await deleteDoc(articleRef);
+    revalidatePath('/admin/articles');
+    revalidatePath('/about');
 }
