@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import {
@@ -10,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, ChevronDown, ChevronRight, X } from 'lucide-react';
+import { Menu, ChevronDown, X } from 'lucide-react';
 import TopBar from './top-bar';
 import { useLocalization } from '@/hooks/use-localization';
 import { getNavItems } from '@/lib/data';
@@ -21,6 +22,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   onNavClick: (pageId: string) => void;
@@ -29,6 +31,16 @@ interface HeaderProps {
 export default function Header({ onNavClick }: HeaderProps) {
   const { t } = useLocalization();
   const navItems = getNavItems(t);
+  const router = useRouter();
+
+  const handleDropdownClick = (id: string) => {
+    const [main, sub] = id.split('/');
+    if (sub) {
+      router.push(`/${main}?page=${sub}`);
+    } else {
+      router.push(`/${main}`);
+    }
+  }
 
   return (
     <>
@@ -36,7 +48,7 @@ export default function Header({ onNavClick }: HeaderProps) {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-20 items-center justify-between">
           <div className="flex items-center gap-3">
-            <a href="/#/" onClick={(e) => { e.preventDefault(); onNavClick('home'); }} className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3">
               <Image
                 src="https://res.cloudinary.com/ddyqhlilj/image/upload/v1754702167/M_1_1_kwckeh.png"
                 alt="Logo RSU Meloy"
@@ -45,7 +57,7 @@ export default function Header({ onNavClick }: HeaderProps) {
                 className="object-contain"
               />
               <span className="font-bold text-xl">RSU Meloy</span>
-            </a>
+            </Link>
           </div>
 
           <nav className="hidden md:flex items-center gap-2">
@@ -60,15 +72,15 @@ export default function Header({ onNavClick }: HeaderProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     {item.submenu.map((subItem) => (
-                      <DropdownMenuItem key={subItem.id} onClick={() => onNavClick(subItem.id)} className="cursor-pointer">
+                      <DropdownMenuItem key={subItem.id} onClick={() => handleDropdownClick(subItem.id)} className="cursor-pointer">
                         {subItem.label}
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Button key={item.id} variant="ghost" onClick={() => onNavClick(item.id)}>
-                  {item.label}
+                <Button key={item.id} variant="ghost" asChild>
+                  <Link href={`/${item.id}`}>{item.label}</Link>
                 </Button>
               )
             )}
@@ -98,7 +110,7 @@ export default function Header({ onNavClick }: HeaderProps) {
                             <div className="flex flex-col gap-2 pl-4">
                               {item.submenu.map((subItem) => (
                                 <SheetClose asChild key={subItem.id}>
-                                  <Button variant="ghost" className="justify-start" onClick={() => onNavClick(subItem.id)}>
+                                  <Button variant="ghost" className="justify-start" onClick={() => handleDropdownClick(subItem.id)}>
                                     {subItem.label}
                                   </Button>
                                 </SheetClose>
@@ -108,13 +120,14 @@ export default function Header({ onNavClick }: HeaderProps) {
                         </AccordionItem>
                       ) : (
                         <SheetClose asChild key={item.id}>
-                          <Button
-                            variant="ghost"
-                            className="w-full justify-start font-semibold py-6 text-base"
-                            onClick={() => onNavClick(item.id)}
-                          >
-                            {item.label}
-                          </Button>
+                           <Link href={`/${item.id}`} passHref>
+                            <Button
+                                variant="ghost"
+                                className="w-full justify-start font-semibold py-6 text-base"
+                            >
+                                {item.label}
+                            </Button>
+                           </Link>
                         </SheetClose>
                       )
                     )}

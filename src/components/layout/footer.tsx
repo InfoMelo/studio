@@ -4,6 +4,7 @@ import { useLocalization } from '@/hooks/use-localization';
 import { Button } from '@/components/ui/button';
 import { Facebook, Twitter, Instagram, MapPin, Phone, Mail } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface FooterProps {
   onNavClick: (pageId: string) => void;
@@ -38,10 +39,10 @@ export default function Footer({ onNavClick }: FooterProps) {
           <div>
             <h4 className="font-semibold mb-4">{t('tautanCepat')}</h4>
             <ul className="space-y-2">
-              <li><a href="#/home" onClick={(e) => { e.preventDefault(); onNavClick('home'); }} className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">{t('beranda')}</a></li>
-              <li><a href="#/services" onClick={(e) => { e.preventDefault(); onNavClick('services'); }} className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">{t('layanan')}</a></li>
-              <li><a href="#/doctors" onClick={(e) => { e.preventDefault(); onNavClick('doctors'); }} className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">{t('jadwalDokter')}</a></li>
-              <li><a href="#/contact" onClick={(e) => { e.preventDefault(); onNavClick('contact'); }} className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">{t('kontak')}</a></li>
+              <li><Link href="/" className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">{t('beranda')}</Link></li>
+              <li><Link href="/services" className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">{t('layanan')}</Link></li>
+              <li><Link href="/doctors" className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">{t('jadwalDokter')}</Link></li>
+              <li><Link href="/contact" className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors">{t('kontak')}</Link></li>
             </ul>
           </div>
 

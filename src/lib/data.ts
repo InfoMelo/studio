@@ -14,10 +14,10 @@ export const getNavItems = (t: (key: string) => string): NavItem[] => [
     { id: 'home', label: t('beranda') },
     { id: 'services', label: t('layanan') },
     { id: 'facilities', label: t('fasilitas') },
-    { id: 'doctors', label: t('jadwal') },
+    { id: 'doctors', label: t('jadwalDokter') },
     { 
         id: 'about', 
-        label: t('profil'),
+        label: t('tentangKami'),
         submenu: [
             { id: 'about/profile', label: t('tentangSubNav') },
             { id: 'about/quality', label: t('mutuSubNav') },
@@ -52,9 +52,9 @@ export const doctorsData: Doctor[] = [
   { id: '6', name: 'Dr. Fitriani', specialty: 'THT', schedule: 'Rabu (08:00 - 11:00)', imageUrl: 'https://placehold.co/100x100.png', aiHint: 'woman doctor' },
 ];
 
-export const quickAccessItems = (t: (key: string) => string, onNavClick: (page: string) => void) => [
-    { icon: UserSearch, title: t('cariNamaDokter'), subtitle: 'Temukan spesialis kami', action: () => onNavClick('doctors') },
+export const quickAccessItems = (t: (key: string) => string, navigate: (path: string) => void) => [
+    { icon: UserSearch, title: t('cariNamaDokter'), subtitle: 'Temukan spesialis kami', action: () => navigate('/doctors') },
     { icon: MessageCircle, title: 'Pendaftaran WhatsApp', subtitle: 'Daftar online via WA', action: () => window.open('https://wa.me/6282151545477', '_blank') },
-    { icon: Heart, title: 'Paket Kesehatan', subtitle: 'Lihat promosi terbaru', action: () => onNavClick('services') },
-    { icon: MapPin, title: t('kontak'), subtitle: 'Lokasi & informasi', action: () => onNavClick('contact') }
+    { icon: Heart, title: 'Paket Kesehatan', subtitle: 'Lihat promosi terbaru', action: () => navigate('/services') },
+    { icon: MapPin, title: t('kontak'), subtitle: 'Lokasi & informasi', action: () => navigate('/contact') }
 ];

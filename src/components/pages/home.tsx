@@ -11,6 +11,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { useRouter } from 'next/navigation';
 
 const heroSlides = [
     { imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754703385/20200808_105509_qv8pvr.jpg', titleKey: 'heroTitle', subtitleKey: 'heroSubtitle', aiHint: 'hospital exterior' },
@@ -31,8 +32,13 @@ interface HomePageProps {
 
 export default function HomePage({ onNavClick }: HomePageProps) {
   const { t } = useLocalization();
-  const qai = quickAccessItems(t, onNavClick);
+  const router = useRouter();
+  const qai = quickAccessItems(t, (path: string) => router.push(path));
   const whyUs = whyUsItems(t);
+
+  const handleWhyUsClick = () => {
+    router.push('/about?page=profile');
+  };
 
   return (
     <div className="animate-fade-in">
@@ -57,8 +63,8 @@ export default function HomePage({ onNavClick }: HomePageProps) {
                     <h1 className="text-4xl md:text-6xl font-bold font-headline">{t(slide.titleKey)}</h1>
                     <p className="text-lg md:text-xl text-gray-200">{t(slide.subtitleKey)}</p>
                     <div className="flex gap-4">
-                      <Button size="lg" onClick={() => onNavClick('contact')}>{t('buatJanji')}</Button>
-                      <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary" onClick={() => onNavClick('services')}>{t('lihatLayanan')}</Button>
+                      <Button size="lg" onClick={() => router.push('/contact')}>{t('buatJanji')}</Button>
+                      <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary" onClick={() => router.push('/services')}>{t('lihatLayanan')}</Button>
                     </div>
                   </div>
                 </div>
@@ -109,7 +115,7 @@ export default function HomePage({ onNavClick }: HomePageProps) {
                   <CardDescription>{item.desc}</CardDescription>
                 </CardContent>
                 <CardFooter>
-                    <Button variant="link" className="p-0" onClick={() => onNavClick('about/profile')}>
+                    <Button variant="link" className="p-0" onClick={handleWhyUsClick}>
                         {t('selengkapnya')} <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                 </CardFooter>
