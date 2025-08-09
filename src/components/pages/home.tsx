@@ -16,17 +16,7 @@ import { ArrowRight } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import type { Service } from '@/lib/types';
-import * as LucideIcons from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const Icon = ({ name, ...props }: { name: string } & LucideIcons.LucideProps) => {
-  const LucideIcon = (LucideIcons as any)[name];
-  if (!LucideIcon) {
-    return <LucideIcons.HelpCircle {...props} />;
-  }
-  return <LucideIcon {...props} />;
-};
-
 
 const heroSlides = [
     { imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754703385/20200808_105509_qv8pvr.jpg', titleKey: 'heroTitle', subtitleKey: 'heroSubtitle', aiHint: 'hospital exterior' },
@@ -169,7 +159,7 @@ export default function HomePage() {
             ) : (
                 services.slice(0, 6).map(service => (
                 <Card key={service.docId} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
-                    <Icon name={service.iconName || 'Heart'} className="h-12 w-12 text-primary mb-4" />
+                    {service.iconUrl && <Image src={service.iconUrl} alt={service.name} width={48} height={48} className="h-12 w-12 text-primary mb-4 object-contain" />}
                     <CardTitle className="mb-2 text-xl">{service.name}</CardTitle>
                     <CardDescription>{service.description}</CardDescription>
                 </Card>

@@ -5,18 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";
-import * as LucideIcons from 'lucide-react';
+import Image from "next/image";
 import ServiceActions from "./ServiceActions";
 import type { Service } from "@/lib/types";
-
-const Icon = ({ name, ...props }: { name: string } & LucideIcons.LucideProps) => {
-  const LucideIcon = (LucideIcons as any)[name];
-  if (!LucideIcon) {
-    return <LucideIcons.HelpCircle {...props} />;
-  }
-  return <LucideIcon {...props} />;
-};
-
 
 export default async function ManageServicesPage() {
     const services = await getServices();
@@ -45,7 +36,15 @@ export default async function ManageServicesPage() {
                         {services.map((service: Service) => (
                             <TableRow key={service.docId}>
                                 <TableCell>
-                                    <Icon name={service.iconName || 'HelpCircle'} className="h-6 w-6 text-primary" />
+                                    {service.iconUrl && (
+                                        <Image
+                                            src={service.iconUrl}
+                                            alt={`Ikon ${service.name}`}
+                                            width={32}
+                                            height={32}
+                                            className="object-contain"
+                                        />
+                                    )}
                                 </TableCell>
                                 <TableCell className="font-medium">{service.name}</TableCell>
                                 <TableCell>{service.description}</TableCell>

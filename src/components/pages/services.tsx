@@ -8,15 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Service as ServiceType } from '@/lib/types';
-import * as LucideIcons from 'lucide-react';
-
-const Icon = ({ name, ...props }: { name: string } & LucideIcons.LucideProps) => {
-  const LucideIcon = (LucideIcons as any)[name];
-  if (!LucideIcon) {
-    return <LucideIcons.HelpCircle {...props} />;
-  }
-  return <LucideIcon {...props} />;
-};
+import Image from 'next/image';
 
 
 export default function ServicesPage() {
@@ -62,7 +54,7 @@ export default function ServicesPage() {
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                     <div className="p-4 bg-primary/10 rounded-full">
-                       <Icon name={service.iconName || 'Heart'} className="h-10 w-10 text-primary" />
+                       {service.iconUrl && <Image src={service.iconUrl} alt={service.name} width={40} height={40} className="h-10 w-10 text-primary object-contain" />}
                     </div>
                   </div>
                   <CardTitle>{service.name}</CardTitle>

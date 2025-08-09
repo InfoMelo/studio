@@ -16,7 +16,7 @@ export interface Service {
   id: string;
   name: string;
   description: string;
-  iconName: string;
+  iconUrl: string;
   docId?: string;
 }
 

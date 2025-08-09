@@ -8,20 +8,18 @@ import * as z from 'zod';
 import { updateService, getService } from '@/app/admin/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
-import { allLucideIcons } from '@/lib/data';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { Service } from '@/lib/types';
 
 const serviceFormSchema = z.object({
   name: z.string().min(2, { message: "Nama layanan harus diisi." }),
   description: z.string().min(10, { message: "Deskripsi harus diisi." }),
-  iconName: z.string({ required_error: "Ikon harus dipilih." }),
+  iconUrl: z.string().url({ message: "URL ikon tidak valid." }),
 });
 
 type ServiceFormValues = z.infer<typeof serviceFormSchema>;
@@ -116,24 +114,16 @@ export default function EditServicePage() {
                         />
                          <FormField
                             control={form.control}
-                            name="iconName"
+                            name="iconUrl"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Ikon</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Pilih ikon untuk layanan" />
-                                        </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {allLucideIcons.map(iconName => (
-                                                <SelectItem key={iconName} value={iconName}>
-                                                    {iconName}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    <FormLabel>URL Ikon</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="https://..." {...field} />
+                                    </FormControl>
+                                    <FormDescription>
+                                       Tempelkan URL gambar untuk ikon (format SVG atau PNG transparan disarankan).
+                                    </FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
