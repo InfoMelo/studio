@@ -21,8 +21,8 @@ const doctorFormSchema = z.object({
   specialty: z.string().min(2, { message: "Spesialisasi harus diisi." }),
   schedule: z.string().min(5, { message: "Jadwal harus diisi." }),
   status: z.enum(['Praktek', 'Tutup']),
-  imageUrl: z.string().url({ message: "URL gambar tidak valid." }).default('https://placehold.co/100x100.png'),
-  aiHint: z.string().default('doctor portrait'),
+  imageUrl: z.string().url({ message: "URL gambar tidak valid." }).optional(),
+  aiHint: z.string().optional(),
 });
 
 type DoctorFormValues = z.infer<typeof doctorFormSchema>;
