@@ -1,3 +1,4 @@
+
 import { getArticle } from '@/app/admin/actions';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -59,9 +60,34 @@ export default async function ArticleDetailPage({ params }: { params: { id: stri
     notFound();
   }
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "image": article.imageUrl,
+    "author": {
+      "@type": "Person",
+      "name": article.author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "RSU Meloy",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://res.cloudinary.com/ddyqhlilj/image/upload/v1754702167/M_1_1_kwckeh.png"
+      }
+    },
+    "datePublished": article.createdAt,
+    "description": article.content.substring(0, 250) + '...'
+  };
+
   return (
     <LanguageProvider>
         <div className="flex min-h-screen flex-col">
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+            />
             <Header />
             <main className="flex-1 py-16 md:py-24 bg-secondary">
                 <div className="container px-4 md:px-6 max-w-4xl mx-auto">
