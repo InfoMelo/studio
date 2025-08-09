@@ -142,7 +142,6 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
               <Card key={doc.id} className="transition-shadow hover:shadow-lg">
                 <CardContent className="p-4 md:p-6 flex items-start gap-4 md:gap-6">
                   <Avatar className="h-24 w-24 border-2 border-primary flex-shrink-0">
-                    <AvatarImage src={doc.imageUrl} alt={doc.name} data-ai-hint={doc.aiHint} />
                     <AvatarFallback>
                       <User className="h-12 w-12 text-muted-foreground" />
                     </AvatarFallback>
