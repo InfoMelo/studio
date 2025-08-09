@@ -38,6 +38,7 @@ export const servicesData: Service[] = [
 ];
 
 export const facilitiesData: Facility[] = [
+    { id: 'ugd', name: 'Unit Gawat Darurat (UGD)', description: 'Pelayanan gawat darurat 24 jam dengan tim medis dan peralatan lengkap untuk penanganan cepat.', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754738558/ugd_idu6bk.jpg', aiHint: 'emergency room' },
     { id: 'ruang-operasi', name: 'Ruang Operasi Modern', description: 'Dilengkapi teknologi bedah terkini untuk prosedur operasi yang aman dan steril.', imageUrl: 'https://placehold.co/600x400.png', aiHint: 'operating room' }, 
     { id: 'ambulans', name: 'Ambulans Gawat Darurat', description: 'Armada siaga 24 jam dengan peralatan medis darurat untuk rujukan pasien.', imageUrl: 'https://placehold.co/600x400.png', aiHint: 'ambulance vehicle' }, 
     { id: 'parkir', name: 'Area Parkir Luas', description: 'Menyediakan area parkir yang luas, aman, dan nyaman untuk pengunjung.', imageUrl: 'https://placehold.co/600x400.png', aiHint: 'parking lot' }
