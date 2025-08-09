@@ -10,7 +10,7 @@ export default function TopBar() {
 
   return (
     <div className="bg-primary text-primary-foreground text-xs">
-      <div className="container flex h-10 items-center justify-between">
+      <div className="container px-4 md:px-6 flex h-10 items-center justify-between">
         <div className="flex items-center gap-4">
           <a href="mailto:rsu_meloy@yahoo.co.id" className="flex items-center gap-2 hover:text-white transition-colors">
             <Mail className="h-4 w-4" />

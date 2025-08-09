@@ -10,7 +10,7 @@ export default function ServicesPage() {
 
   return (
     <div className="py-16 md:py-24 bg-secondary animate-fade-in">
-      <div className="container">
+      <div className="container px-4 md:px-6">
         <SectionHeader title={t('layananTitle')} subtitle={t('layananSubtitle')} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           {servicesData.map((service) => (

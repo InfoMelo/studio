@@ -50,7 +50,7 @@ export default function HomePage() {
                   priority={index === 0}
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/10" />
-                <div className="container h-full relative flex items-center">
+                <div className="container px-4 md:px-6 h-full relative flex items-center">
                   <div className="max-w-2xl text-white space-y-6 animate-fade-in">
                     <h1 className="text-4xl md:text-6xl font-bold font-headline">{t(slide.titleKey)}</h1>
                     <p className="text-lg md:text-xl text-gray-200">{t(slide.subtitleKey)}</p>
@@ -73,9 +73,9 @@ export default function HomePage() {
       </Carousel>
       
       {/* Quick Access Section */}
-      <section className="py-16 md:py-24">
-          <div className="container">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-background p-4 md:p-6 rounded-2xl shadow-lg border -mt-40 relative z-10 backdrop-blur-sm bg-background/80">
+      <section className="py-16 md:py-20">
+          <div className="container px-4 md:px-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-background p-4 md:p-6 rounded-2xl shadow-lg border -mt-36 relative z-10 backdrop-blur-sm bg-background/80">
                   {qai.map((item, index) => (
                       <div
                           key={index}
@@ -98,7 +98,7 @@ export default function HomePage() {
 
       {/* Why Choose Us Section */}
       <section className="py-16 md:py-24 pt-0">
-        <div className="container">
+        <div className="container px-4 md:px-6">
           <SectionHeader title={t('kenapaMemilihKami')} subtitle={t('kenapaSubtitle')} />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             {whyUs.map((item, index) => (
@@ -125,7 +125,7 @@ export default function HomePage() {
 
       {/* Centers of Excellence Section */}
       <section className="py-16 md:py-24 bg-secondary">
-        <div className="container">
+        <div className="container px-4 md:px-6">
           <SectionHeader title={t('pusatKeunggulan')} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             {servicesData.slice(0, 6).map(service => (

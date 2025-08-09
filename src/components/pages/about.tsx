@@ -62,7 +62,7 @@ export default function AboutPage({ subPage }: AboutPageProps) {
 
   return (
     <div className="py-16 md:py-24 animate-fade-in">
-      <div className="container">
+      <div className="container px-4 md:px-6">
         <SectionHeader title={t('tentangTitle')} />
         {renderContent()}
       </div>

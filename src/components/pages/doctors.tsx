@@ -64,7 +64,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
 
   return (
     <div className="py-16 md:py-24 bg-background animate-fade-in min-h-[80vh]">
-      <div className="container">
+      <div className="container px-4 md:px-6">
         <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
         
         <Card className="p-4 md:p-6 mb-8 mt-12">

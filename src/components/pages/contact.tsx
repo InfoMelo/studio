@@ -17,7 +17,7 @@ export default function ContactPage() {
 
   return (
     <div className="py-16 md:py-24 animate-fade-in">
-      <div className="container">
+      <div className="container px-4 md:px-6">
         <SectionHeader title={t('kontakTitle')} subtitle={t('kontakSubtitle')} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
           <Card>
