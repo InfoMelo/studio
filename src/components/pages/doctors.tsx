@@ -15,6 +15,7 @@ import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
+import DownloadScheduleButton from './DownloadScheduleButton';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
@@ -115,7 +116,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
           <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
           
           <Card className="p-4 md:p-6 mb-8 mt-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
               <div className="md:col-span-2">
                 <Input
                   placeholder={t('cariNamaDokter')}
@@ -134,6 +135,9 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+             <div className="mt-4 flex justify-end">
+                <DownloadScheduleButton doctors={displayedDoctors} specialty={activeSpecialty} />
             </div>
           </Card>
 
