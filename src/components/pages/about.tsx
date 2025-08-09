@@ -7,6 +7,7 @@ import SectionHeader from '@/components/common/section-header';
 import { Card, CardContent } from '@/components/ui/card';
 import ArticlesList from './articles';
 import PartnersList from './partners';
+import VacanciesList from './vacancies';
 
 interface AboutPageProps {
   subPage: string;
@@ -69,7 +70,7 @@ export default function AboutPage({ subPage }: AboutPageProps) {
       case 'partners':
         return <PartnersList />;
       case 'vacancies':
-        return <DefaultContent title={t('lowonganKerja')} />;
+        return <VacanciesList />;
       default:
         return <ProfileContent />;
     }

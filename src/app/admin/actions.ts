@@ -4,7 +4,7 @@
 import { db } from '@/lib/firebase';
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, where, writeBatch, orderBy, Timestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
-import type { Doctor, Service, Facility, Article, Partner } from '@/lib/types';
+import type { Doctor, Service, Facility, Article, Partner, Vacancy } from '@/lib/types';
 import * as XLSX from 'xlsx';
 
 // Doctors Actions
@@ -274,4 +274,69 @@ export async function deletePartner(docId: string) {
     await deleteDoc(partnerRef);
     revalidatePath('/admin/partners');
     revalidatePath('/');
+}
+
+// Vacancy Actions
+export async function getVacancies(): Promise<Vacancy[]> {
+    const vacanciesCol = collection(db, 'vacancies');
+    const q = query(vacanciesCol, orderBy('createdAt', 'desc'));
+    const vacancySnapshot = await getDocs(q);
+    return vacancySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return { 
+            ...data,
+            docId: doc.id,
+            createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
+            deadline: (data.deadline as Timestamp).toDate().toISOString()
+        } as Vacancy;
+    });
+}
+
+export async function getVacancy(docId: string): Promise<Vacancy | null> {
+    const vacancyRef = doc(db, 'vacancies', docId);
+    const vacancySnap = await getDoc(vacancyRef);
+    if (vacancySnap.exists()) {
+        const data = vacancySnap.data();
+        return { 
+            ...data, 
+            docId: vacancySnap.id,
+            createdAt: (data.createdAt as Timestamp).toDate().toISOString(),
+            deadline: (data.deadline as Timestamp).toDate().toISOString()
+        } as Vacancy;
+    }
+    return null;
+}
+
+export async function addVacancy(vacancy: Omit<Vacancy, 'id' | 'docId' | 'createdAt'> & { deadline: string }) {
+    const vacanciesCol = collection(db, 'vacancies');
+    const newVacancy = { 
+        ...vacancy, 
+        id: new Date().getTime().toString(),
+        createdAt: Timestamp.now(),
+        deadline: Timestamp.fromDate(new Date(vacancy.deadline)),
+    };
+    await addDoc(vacanciesCol, newVacancy);
+    revalidatePath('/admin/vacancies');
+    revalidatePath('/about');
+}
+
+export async function updateVacancy(docId: string, vacancy: Partial<Omit<Vacancy, 'id' | 'docId' | 'createdAt'>> & { deadline?: string }) {
+    const vacancyRef = doc(db, 'vacancies', docId);
+    const dataToUpdate: Partial<DocumentData> = { ...vacancy };
+
+    if (vacancy.deadline) {
+        dataToUpdate.deadline = Timestamp.fromDate(new Date(vacancy.deadline));
+    }
+
+    await updateDoc(vacancyRef, dataToUpdate);
+    revalidatePath('/admin/vacancies');
+    revalidatePath(`/admin/vacancies/edit/${docId}`);
+    revalidatePath('/about');
+}
+
+export async function deleteVacancy(docId: string) {
+    const vacancyRef = doc(db, 'vacancies', docId);
+    await deleteDoc(vacancyRef);
+    revalidatePath('/admin/vacancies');
+    revalidatePath('/about');
 }

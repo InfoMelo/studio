@@ -62,6 +62,18 @@ export interface Partner {
   docId?: string;
 }
 
+export interface Vacancy {
+  id: string;
+  title: string;
+  description: string;
+  type: 'Full-time' | 'Part-time' | 'Internship';
+  location: string;
+  deadline: string; // ISO string date
+  createdAt: string; // ISO string date
+  docId?: string;
+}
+
+
 export interface Translation {
   [key: string]: string;
 }
