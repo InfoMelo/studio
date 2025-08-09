@@ -10,7 +10,7 @@ export default function TopBar() {
 
   return (
     <div className="bg-primary text-primary-foreground text-xs">
-      <div className="container px-4 md:px-6 flex h-10 items-center justify-between">
+      <div className="container flex h-10 items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-4">
           <a href="mailto:rsu_meloy@yahoo.co.id" className="flex items-center gap-2 hover:text-white transition-colors">
             <Mail className="h-4 w-4" />
@@ -25,7 +25,7 @@ export default function TopBar() {
           <Button
             variant="outline"
             size="sm"
-            className="h-7 border-primary-foreground/50 hover:bg-primary-foreground/10 hover:text-primary-foreground text-primary-foreground rounded-full text-xs animate-pulse-glow"
+            className="h-7 animate-pulse border-primary-foreground/50 bg-white/10 text-primary-foreground hover:bg-white/20 rounded-full text-xs"
             asChild
           >
             <a href="tel:054924222">
