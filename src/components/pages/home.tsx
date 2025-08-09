@@ -30,6 +30,15 @@ const whyUsItems = (t: (key: string) => string) => [
     { title: t('kenyamananTitle'), desc: t('kenyamananDesc'), imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754741672/lobi_y0el0x.jpg', aiHint: 'hospital lobby' },
 ];
 
+const partnerLogos = [
+    { name: 'Partner 1', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/logo-bpjs-kesehatan_x30abz.png', aiHint: 'bpjs kesehatan logo' },
+    { name: 'Partner 2', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/Jasa_Raharja_logo.svg_pgrfsv.png', aiHint: 'jasa raharja logo' },
+    { name: 'Partner 3', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/Logo_KPC_oyp4ku.png', aiHint: 'kpc logo' },
+    { name: 'Partner 4', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/pama-persada-nusantara-logo-E31EC4C152-seeklogo.com_z0kmvj.png', aiHint: 'pama logo' },
+    { name: 'Partner 5', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807493/1655273576182_a0q7cv.png', aiHint: 'thiess logo' },
+    { name: 'Partner 6', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754807494/logo-pln_n0xrcp.png', aiHint: 'pln logo' },
+];
+
 export default function HomePage() {
   const { t } = useLocalization();
   const router = useRouter();
@@ -64,7 +73,7 @@ export default function HomePage() {
                   src={slide.imageUrl}
                   alt={t(slide.titleKey)}
                   data-ai-hint={slide.aiHint}
-                  layout="fill"
+                  fill
                   objectFit="cover"
                   className="brightness-50"
                   priority={index === 0}
@@ -165,6 +174,27 @@ export default function HomePage() {
                 </Card>
                 ))
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="py-16 md:py-24">
+        <div className="container px-4 md:px-6">
+          <SectionHeader title={t('mitraKami')} subtitle={t('mitraSubtitle')} />
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+            {partnerLogos.map((partner) => (
+              <div key={partner.name} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
+                <Image
+                  src={partner.imageUrl}
+                  alt={partner.name}
+                  data-ai-hint={partner.aiHint}
+                  width={140}
+                  height={70}
+                  className="object-contain"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
