@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,6 @@ import { Menu, ChevronDown, X } from 'lucide-react';
 import TopBar from './top-bar';
 import { useLocalization } from '@/hooks/use-localization';
 import { getNavItems } from '@/lib/data';
-import type { NavItem } from '@/lib/types';
 import {
   Accordion,
   AccordionContent,
@@ -24,11 +23,7 @@ import {
 } from "@/components/ui/accordion";
 import { useRouter } from 'next/navigation';
 
-interface HeaderProps {
-  onNavClick: (pageId: string) => void;
-}
-
-export default function Header({ onNavClick }: HeaderProps) {
+export default function Header() {
   const { t } = useLocalization();
   const navItems = getNavItems(t);
   const router = useRouter();
@@ -92,7 +87,7 @@ export default function Header({ onNavClick }: HeaderProps) {
                 <Menu />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
+            <SheetContent side="right" className="p-0">
               <div className="flex flex-col h-full">
                 <div className="flex justify-between items-center p-4 border-b">
                   <h2 className="font-bold">Menu</h2>

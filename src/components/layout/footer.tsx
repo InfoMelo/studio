@@ -6,11 +6,7 @@ import { Facebook, Twitter, Instagram, MapPin, Phone, Mail } from 'lucide-react'
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface FooterProps {
-  onNavClick: (pageId: string) => void;
-}
-
-export default function Footer({ onNavClick }: FooterProps) {
+export default function Footer() {
   const { t } = useLocalization();
 
   return (
@@ -18,7 +14,7 @@ export default function Footer({ onNavClick }: FooterProps) {
       <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1 space-y-4">
-            <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3">
                <Image
                 src="https://res.cloudinary.com/ddyqhlilj/image/upload/v1754702167/M_1_1_kwckeh.png"
                 alt="Logo RSU Meloy"
@@ -27,7 +23,7 @@ export default function Footer({ onNavClick }: FooterProps) {
                 className="object-contain bg-white rounded-full p-1"
               />
               <h3 className="text-xl font-bold">RSU Meloy</h3>
-            </div>
+            </Link>
             <p className="text-sm text-primary-foreground/80">{t('footerTagline')}</p>
             <div className="flex space-x-2">
               <Button size="icon" variant="ghost" className="hover:bg-primary-foreground/10"><Facebook className="h-5 w-5" /></Button>

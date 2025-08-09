@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useLocalization } from '@/hooks/use-localization';
 import { servicesData, quickAccessItems } from '@/lib/data';
 import SectionHeader from '@/components/common/section-header';
@@ -25,20 +26,11 @@ const whyUsItems = (t: (key: string) => string) => [
     { title: t('kenyamananTitle'), desc: t('kenyamananDesc'), imageUrl: 'https://images.pexels.com/photos/6775268/pexels-photo-6775268.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'hospital room' },
 ];
 
-interface HomePageProps {
-  onNavClick: (pageId: string) => void;
-  onSearch: (term: string) => void;
-}
-
-export default function HomePage({ onNavClick }: HomePageProps) {
+export default function HomePage() {
   const { t } = useLocalization();
   const router = useRouter();
   const qai = quickAccessItems(t, (path: string) => router.push(path));
   const whyUs = whyUsItems(t);
-
-  const handleWhyUsClick = () => {
-    router.push('/about?page=profile');
-  };
 
   return (
     <div className="animate-fade-in">
@@ -63,8 +55,12 @@ export default function HomePage({ onNavClick }: HomePageProps) {
                     <h1 className="text-4xl md:text-6xl font-bold font-headline">{t(slide.titleKey)}</h1>
                     <p className="text-lg md:text-xl text-gray-200">{t(slide.subtitleKey)}</p>
                     <div className="flex gap-4">
-                      <Button size="lg" onClick={() => router.push('/contact')}>{t('buatJanji')}</Button>
-                      <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary" onClick={() => router.push('/services')}>{t('lihatLayanan')}</Button>
+                      <Button size="lg" asChild>
+                        <Link href="/contact">{t('buatJanji')}</Link>
+                      </Button>
+                      <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary" asChild>
+                        <Link href="/services">{t('lihatLayanan')}</Link>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -115,9 +111,11 @@ export default function HomePage({ onNavClick }: HomePageProps) {
                   <CardDescription>{item.desc}</CardDescription>
                 </CardContent>
                 <CardFooter>
-                    <Button variant="link" className="p-0" onClick={handleWhyUsClick}>
-                        {t('selengkapnya')} <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                  <Button variant="link" className="p-0" asChild>
+                      <Link href="/about?page=profile">
+                          {t('selengkapnya')} <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
