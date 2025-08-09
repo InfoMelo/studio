@@ -19,7 +19,7 @@ import type { Service } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const heroSlides = [
-    { imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754703385/20200808_105509_qv8pvr.jpg', titleKey: 'heroTitle', subtitleKey: 'heroSubtitle', aiHint: 'hospital exterior' },
+    { imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754745892/20250809_155010_nebhpv.jpg', titleKey: 'heroTitle', subtitleKey: 'heroSubtitle', aiHint: 'hospital building' },
     { imageUrl: 'https://images.pexels.com/photos/3957987/pexels-photo-3957987.jpeg?auto=compress&cs=tinysrgb&w=1600', titleKey: 'fasilitasTitle', subtitleKey: 'fasilitasSubtitle', aiHint: 'medical technology' },
     { imageUrl: 'https://images.pexels.com/photos/5214996/pexels-photo-5214996.jpeg?auto=compress&cs=tinysrgb&w=1600', titleKey: 'profesionalTitle', subtitleKey: 'profesionalDesc', aiHint: 'medical team' }
 ];
