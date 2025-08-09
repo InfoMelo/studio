@@ -7,7 +7,8 @@ import { getIronSession } from 'iron-session';
 import { Session, sessionOptions } from '@/lib/session';
 import { firebaseAdmin } from '@/lib/firebase-admin';
 
-// Re-check password existence here, where it's more reliable
+// This function dynamically gets session options and validates the password.
+// It's called only from Server Actions, where process.env is reliably available.
 function getSessionOptions() {
   const password = process.env.SECRET_COOKIE_PASSWORD;
   if (!password) {
