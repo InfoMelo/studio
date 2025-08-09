@@ -25,7 +25,7 @@ export default function TopBar() {
           <Button
             variant="outline"
             size="sm"
-            className="h-7 border-primary-foreground/50 hover:bg-primary-foreground/10 hover:text-primary-foreground text-primary-foreground rounded-full text-xs animate-pulse"
+            className="h-7 border-primary-foreground/50 hover:bg-primary-foreground/10 hover:text-primary-foreground text-primary-foreground rounded-full text-xs animate-pulse-glow"
             asChild
           >
             <a href="tel:054924222">
