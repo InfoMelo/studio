@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import DoctorActions from "./DoctorActions";
+import BulkImportButton from "./BulkImportButton";
 
 export default async function ManageDoctorsPage() {
     const doctors = await getDoctors();
@@ -14,11 +15,14 @@ export default async function ManageDoctorsPage() {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Kelola Dokter</CardTitle>
-                <Button asChild>
-                    <Link href="/admin/doctors/new">
-                        <PlusCircle className="mr-2 h-4 w-4" /> Tambah Dokter
-                    </Link>
-                </Button>
+                <div className="flex items-center gap-2">
+                    <BulkImportButton />
+                    <Button asChild>
+                        <Link href="/admin/doctors/new">
+                            <PlusCircle className="mr-2 h-4 w-4" /> Tambah Dokter
+                        </Link>
+                    </Button>
+                </div>
             </CardHeader>
             <CardContent>
                 <Table>
