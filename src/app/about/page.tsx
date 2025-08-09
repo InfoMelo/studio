@@ -22,24 +22,22 @@ function AboutPageContent() {
   const subPage = searchParams.get('page') || 'profile';
 
   return (
+    <AboutPage subPage={subPage} />
+  );
+}
+
+export default function About() {
+  return (
     <LanguageProvider>
       <div className="flex min-h-screen flex-col">
         <Header />
         <main className="flex-1">
-            <AboutPage subPage={subPage} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <AboutPageContent />
+          </Suspense>
         </main>
         <Footer />
       </div>
     </LanguageProvider>
-  )
+  );
 }
-
-function About() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <AboutPageContent />
-    </Suspense>
-  )
-}
-
-export default About;

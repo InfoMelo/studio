@@ -22,24 +22,22 @@ function DoctorPageContent() {
     const initialSearchTerm = searchParams.get('search') || '';
 
     return (
+        <DoctorSchedulePage initialSearchTerm={initialSearchTerm} />
+    );
+}
+
+export default function DoctorsPage() {
+    return (
         <LanguageProvider>
             <div className="flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">
-                    <DoctorSchedulePage initialSearchTerm={initialSearchTerm} />
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <DoctorPageContent />
+                  </Suspense>
                 </main>
                 <Footer />
             </div>
         </LanguageProvider>
     );
 }
-
-function DoctorsPage() {
-    return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <DoctorPageContent />
-        </Suspense>
-    )
-}
-
-export default DoctorsPage;
