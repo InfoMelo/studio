@@ -6,6 +6,7 @@ import { useLocalization } from '@/hooks/use-localization';
 import SectionHeader from '@/components/common/section-header';
 import { Card, CardContent } from '@/components/ui/card';
 import ArticlesList from './articles';
+import PartnersList from './partners';
 
 interface AboutPageProps {
   subPage: string;
@@ -65,6 +66,8 @@ export default function AboutPage({ subPage }: AboutPageProps) {
         return <DefaultContent title={t('pencapaianSubNav')} />;
       case 'health-articles':
         return <ArticlesList />;
+      case 'partners':
+        return <PartnersList />;
       default:
         return <ProfileContent />;
     }
