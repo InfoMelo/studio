@@ -26,7 +26,7 @@ const heroSlides = [
 
 const whyUsItems = (t: (key: string) => string) => [
     { title: t('profesionalTitle'), desc: t('profesionalDesc'), imageUrl: 'https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'doctors discussing' },
-    { title: t('teknologiTitle'), desc: t('teknologiDesc'), imageUrl: 'https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'modern medical equipment' },
+    { title: t('teknologiTitle'), desc: t('teknologiDesc'), imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754749759/panoramic-x-ray-thegem-blog-default_y8f15e.jpg', aiHint: 'modern medical equipment' },
     { title: t('kenyamananTitle'), desc: t('kenyamananDesc'), imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754741672/lobi_y0el0x.jpg', aiHint: 'hospital lobby' },
 ];
 
