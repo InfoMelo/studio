@@ -3,8 +3,9 @@ import { getDoctors } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pencil, PlusCircle, Trash2 } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import Link from "next/link";
+import DoctorActions from "./DoctorActions";
 
 export default async function ManageDoctorsPage() {
     const doctors = await getDoctors();
@@ -36,12 +37,7 @@ export default async function ManageDoctorsPage() {
                                 <TableCell>{doctor.specialty}</TableCell>
                                 <TableCell>{doctor.schedule}</TableCell>
                                 <TableCell className="text-right">
-                                    <Button variant="ghost" size="icon">
-                                        <Pencil className="h-4 w-4" />
-                                    </Button>
-                                    <Button variant="ghost" size="icon" className="text-destructive">
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
+                                   <DoctorActions doctor={doctor} />
                                 </TableCell>
                             </TableRow>
                         ))}

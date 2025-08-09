@@ -2,16 +2,25 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, where } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
-import type { Doctor } from '@/lib/types';
+import type { Doctor, Service, Facility } from '@/lib/types';
 
 // Doctors Actions
 export async function getDoctors(): Promise<Doctor[]> {
     const doctorsCol = collection(db, 'doctors');
     const doctorSnapshot = await getDocs(doctorsCol);
     const doctorList = doctorSnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Doctor));
-    return doctorList;
+    return doctorList.sort((a, b) => (a.name > b.name ? 1 : -1));
+}
+
+export async function getDoctor(docId: string): Promise<Doctor | null> {
+    const doctorRef = doc(db, 'doctors', docId);
+    const doctorSnap = await getDoc(doctorRef);
+    if (doctorSnap.exists()) {
+        return { ...doctorSnap.data(), docId: doctorSnap.id } as Doctor;
+    }
+    return null;
 }
 
 export async function addDoctor(doctor: Omit<Doctor, 'id' | 'docId'>) {
