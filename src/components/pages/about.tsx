@@ -30,7 +30,7 @@ const ProfileContent = () => {
       </div>
       <div>
         <Image 
-          src="https://placehold.co/500x350.png"
+          src="https://res.cloudinary.com/ddyqhlilj/image/upload/v1754745892/20250809_155010_nebhpv.jpg"
           alt="Gedung RS Meloy" 
           data-ai-hint="hospital building"
           width={500} 
