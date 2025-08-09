@@ -16,7 +16,7 @@ export async function createSessionCookie(
       
     cookies().set('firebase-session', sessionCookie, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true, // Selalu set secure ke true untuk keamanan
       maxAge: expiresIn,
       path: '/',
     });
