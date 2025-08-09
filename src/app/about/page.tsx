@@ -1,11 +1,10 @@
 
 import { LanguageProvider } from '@/contexts/language-context';
-import AboutPage from '@/components/pages/about';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
-import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import AboutPageContent from './AboutPageContent';
 
 export const metadata: Metadata = {
   title: 'Profil Rumah Sakit',
@@ -15,16 +14,6 @@ export const metadata: Metadata = {
     description: 'Kenali lebih dekat komitmen kami dalam melayani masyarakat melalui sejarah dan pencapaian kami.',
   },
 };
-
-function AboutPageContent() {
-  'use client';
-  const searchParams = useSearchParams();
-  const subPage = searchParams.get('page') || 'profile';
-
-  return (
-    <AboutPage subPage={subPage} />
-  );
-}
 
 export default function About() {
   return (

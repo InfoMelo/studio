@@ -1,11 +1,10 @@
 
 import { LanguageProvider } from '@/contexts/language-context';
-import DoctorSchedulePage from '@/components/pages/doctors';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
-import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import DoctorPageContent from './DoctorPageContent';
 
 export const metadata: Metadata = {
   title: 'Jadwal Dokter',
@@ -15,16 +14,6 @@ export const metadata: Metadata = {
     description: 'Cari jadwal dokter berdasarkan nama atau spesialisasi untuk merencanakan konsultasi Anda.',
   },
 };
-
-function DoctorPageContent() {
-    'use client';
-    const searchParams = useSearchParams();
-    const initialSearchTerm = searchParams.get('search') || '';
-
-    return (
-        <DoctorSchedulePage initialSearchTerm={initialSearchTerm} />
-    );
-}
 
 export default function DoctorsPage() {
     return (
