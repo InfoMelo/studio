@@ -75,6 +75,7 @@ export async function bulkAddDoctors(fileBase64: string): Promise<{ success: boo
                 name: row.name,
                 specialty: row.specialty,
                 schedule: row.schedule,
+                status: row.status === 'Tutup' ? 'Tutup' : 'Praktek',
                 imageUrl: row.imageUrl || 'https://placehold.co/100x100.png',
                 aiHint: row.aiHint || 'doctor portrait'
             };

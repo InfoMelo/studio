@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { handleSmartSearch } from '@/app/actions';
 import { getDoctors } from '@/app/admin/actions';
 import { useDebounce } from 'use-debounce';
+import { Badge } from '@/components/ui/badge';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
@@ -147,8 +148,15 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-900">{doc.name}</h3>
-                    <p className="text-primary font-semibold mb-3">{doc.specialty}</p>
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-900">{doc.name}</h3>
+                            <p className="text-primary font-semibold mb-3">{doc.specialty}</p>
+                        </div>
+                        <Badge variant={doc.status === 'Praktek' ? 'default' : 'destructive'} className={`${doc.status === 'Praktek' ? 'bg-green-600' : ''} text-white`}>
+                            {doc.status}
+                        </Badge>
+                    </div>
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Calendar className="h-4 w-4 text-primary" />
                       <span>{doc.schedule}</span>

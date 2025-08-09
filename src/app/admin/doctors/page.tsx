@@ -7,6 +7,7 @@ import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import DoctorActions from "./DoctorActions";
 import BulkImportButton from "./BulkImportButton";
+import { Badge } from "@/components/ui/badge";
 
 export default async function ManageDoctorsPage() {
     const doctors = await getDoctors();
@@ -30,6 +31,7 @@ export default async function ManageDoctorsPage() {
                         <TableRow>
                             <TableHead>Nama</TableHead>
                             <TableHead>Spesialisasi</TableHead>
+                            <TableHead>Status</TableHead>
                             <TableHead>Jadwal</TableHead>
                             <TableHead className="text-right">Aksi</TableHead>
                         </TableRow>
@@ -39,6 +41,11 @@ export default async function ManageDoctorsPage() {
                             <TableRow key={doctor.docId}>
                                 <TableCell className="font-medium">{doctor.name}</TableCell>
                                 <TableCell>{doctor.specialty}</TableCell>
+                                <TableCell>
+                                    <Badge variant={doctor.status === 'Praktek' ? 'default' : 'destructive'} className={`${doctor.status === 'Praktek' ? 'bg-green-600' : ''} text-white`}>
+                                        {doctor.status}
+                                    </Badge>
+                                </TableCell>
                                 <TableCell>{doctor.schedule}</TableCell>
                                 <TableCell className="text-right">
                                    <DoctorActions doctor={doctor} />

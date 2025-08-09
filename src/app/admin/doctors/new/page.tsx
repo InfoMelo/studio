@@ -11,11 +11,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const doctorFormSchema = z.object({
   name: z.string().min(2, { message: "Nama harus diisi." }),
   specialty: z.string().min(2, { message: "Spesialisasi harus diisi." }),
   schedule: z.string().min(5, { message: "Jadwal harus diisi." }),
+  status: z.enum(['Praktek', 'Tutup']),
   imageUrl: z.string().url({ message: "URL gambar tidak valid." }).default('https://placehold.co/100x100.png'),
   aiHint: z.string().default('doctor portrait'),
 });
@@ -31,6 +33,7 @@ export default function NewDoctorPage() {
             name: '',
             specialty: '',
             schedule: '',
+            status: 'Praktek',
             imageUrl: 'https://placehold.co/100x100.png',
             aiHint: 'doctor portrait'
         }
@@ -90,6 +93,27 @@ export default function NewDoctorPage() {
                                         <Input placeholder="Contoh: Senin, Rabu (09:00 - 12:00)" {...field} />
                                     </FormControl>
                                     <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="status"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Status</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Pilih status" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                    <SelectItem value="Praktek">Praktek</SelectItem>
+                                    <SelectItem value="Tutup">Tutup</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
                                 </FormItem>
                             )}
                         />
