@@ -32,6 +32,7 @@ export interface Doctor {
   specialty: string;
   schedule: string;
   status: 'Praktek' | 'Tutup';
+  statusInfo?: string; // Keterangan tambahan untuk status
   imageUrl: string;
   aiHint: string;
   // Firestore document ID, optional as it's not present on creation

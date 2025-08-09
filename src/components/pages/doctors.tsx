@@ -98,6 +98,16 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
 
   const isSearching = searchLoading || (loading && !allDoctors.length);
 
+  const getTooltipContent = (doctor: Doctor) => {
+    if (doctor.status === 'Tutup' && doctor.statusInfo) {
+      return doctor.statusInfo;
+    }
+    if (doctor.status === 'Tutup') {
+      return 'Dokter tidak membuka praktek saat ini.';
+    }
+    return 'Dokter sedang membuka praktek sesuai jadwal.';
+  }
+
   return (
     <TooltipProvider>
       <div className="py-16 md:py-24 bg-background animate-fade-in min-h-[80vh]">
@@ -161,7 +171,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
                               </Badge>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>{doc.status === 'Praktek' ? 'Dokter sedang membuka praktek sesuai jadwal.' : 'Dokter tidak membuka praktek saat ini.'}</p>
+                              <p>{getTooltipContent(doc)}</p>
                             </TooltipContent>
                           </Tooltip>
                       </div>

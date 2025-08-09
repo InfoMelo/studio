@@ -8,16 +8,18 @@ import * as z from 'zod';
 import { addDoctor } from '@/app/admin/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 const doctorFormSchema = z.object({
   name: z.string().min(2, { message: "Nama harus diisi." }),
   specialty: z.string().min(2, { message: "Spesialisasi harus diisi." }),
   schedule: z.string().min(5, { message: "Jadwal harus diisi." }),
   status: z.enum(['Praktek', 'Tutup']),
+  statusInfo: z.string().optional(),
   imageUrl: z.string().url({ message: "URL gambar tidak valid." }).default('https://placehold.co/100x100.png'),
   aiHint: z.string().default('doctor portrait'),
 });
@@ -34,10 +36,13 @@ export default function NewDoctorPage() {
             specialty: '',
             schedule: '',
             status: 'Praktek',
+            statusInfo: '',
             imageUrl: 'https://placehold.co/100x100.png',
             aiHint: 'doctor portrait'
         }
     });
+
+    const statusValue = form.watch('status');
 
     async function onSubmit(data: DoctorFormValues) {
         try {
@@ -117,6 +122,27 @@ export default function NewDoctorPage() {
                                 </FormItem>
                             )}
                         />
+                         {statusValue === 'Tutup' && (
+                          <FormField
+                            control={form.control}
+                            name="statusInfo"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Keterangan Tambahan (Opsional)</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    placeholder="Contoh: Kembali praktek tanggal 25 Des 2024"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Informasi ini akan ditampilkan saat status 'Tutup' disorot.
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
                         <div className="flex justify-end gap-2">
                             <Button type="button" variant="outline" onClick={() => router.back()}>Batal</Button>
                             <Button type="submit">Simpan</Button>

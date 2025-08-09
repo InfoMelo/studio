@@ -8,19 +8,21 @@ import * as z from 'zod';
 import { updateDoctor, getDoctor } from '@/app/admin/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
 import type { Doctor } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 const doctorFormSchema = z.object({
   name: z.string().min(2, { message: "Nama harus diisi." }),
   specialty: z.string().min(2, { message: "Spesialisasi harus diisi." }),
   schedule: z.string().min(5, { message: "Jadwal harus diisi." }),
   status: z.enum(['Praktek', 'Tutup']),
+  statusInfo: z.string().optional(),
   imageUrl: z.string().url({ message: "URL gambar tidak valid." }).optional(),
   aiHint: z.string().optional(),
 });
@@ -41,10 +43,13 @@ export default function EditDoctorPage() {
             specialty: '',
             schedule: '',
             status: 'Praktek',
+            statusInfo: '',
             imageUrl: '',
             aiHint: ''
         }
     });
+
+    const statusValue = form.watch('status');
 
     useEffect(() => {
         if (docId) {
@@ -77,6 +82,7 @@ export default function EditDoctorPage() {
                     <CardTitle>Edit Dokter</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-8">
+                    <Skeleton className="h-10 w-full" />
                     <Skeleton className="h-10 w-full" />
                     <Skeleton className="h-10 w-full" />
                     <Skeleton className="h-10 w-full" />
@@ -158,6 +164,28 @@ export default function EditDoctorPage() {
                                 </FormItem>
                             )}
                         />
+                        {statusValue === 'Tutup' && (
+                          <FormField
+                            control={form.control}
+                            name="statusInfo"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Keterangan Tambahan (Opsional)</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    placeholder="Contoh: Kembali praktek tanggal 25 Des 2024"
+                                    {...field}
+                                    value={field.value ?? ''}
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Informasi ini akan ditampilkan saat status 'Tutup' disorot.
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
                          <FormField
                             control={form.control}
                             name="imageUrl"
