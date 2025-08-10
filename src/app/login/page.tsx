@@ -1,21 +1,20 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { auth } from '@/lib/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { createSession } from './actions';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
+import { Terminal, Loader } from 'lucide-react';
 
 const loginFormSchema = z.object({
   email: z.string().email({ message: "Format email tidak valid." }),
@@ -28,6 +27,19 @@ export default function LoginPage() {
     const router = useRouter();
     const { toast } = useToast();
     const [formError, setFormError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    // Redirect if already logged in
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                router.replace('/admin');
+            } else {
+                setLoading(false);
+            }
+        });
+        return () => unsubscribe();
+    }, [router]);
 
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginFormSchema),
@@ -37,18 +49,9 @@ export default function LoginPage() {
     async function onSubmit(data: LoginFormValues) {
         setFormError(null);
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-            const user = userCredential.user;
-            const idToken = await user.getIdToken();
-
-            const sessionResult = await createSession(idToken);
-
-            if (sessionResult.success) {
-                toast({ title: 'Login Berhasil', description: 'Anda akan diarahkan ke dashboard.' });
-                router.push('/admin');
-            } else {
-                 throw new Error(sessionResult.error || "Gagal membuat sesi di server.");
-            }
+            await signInWithEmailAndPassword(auth, data.email, data.password);
+            toast({ title: 'Login Berhasil', description: 'Anda akan diarahkan ke dashboard.' });
+            router.push('/admin');
 
         } catch (error: any) {
             console.error("Login failed:", error);
@@ -72,6 +75,15 @@ export default function LoginPage() {
             setFormError(errorMessage);
         }
     }
+
+    if (loading) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center">
+                <Loader className="h-8 w-8 animate-spin" />
+            </div>
+        );
+    }
+
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-secondary">
