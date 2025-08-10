@@ -51,22 +51,6 @@ export const servicesData: Omit<Service, 'iconUrl'>[] = [
     { id: 'farmasi', name: 'Farmasi', description: 'Menyediakan obat-obatan resep dan non-resep dengan jaminan kualitas.' }
 ];
 
-export const facilitiesData: Facility[] = [
-    { id: 'ugd', name: 'Unit Gawat Darurat (UGD)', description: 'Pelayanan gawat darurat 24 jam dengan tim medis dan peralatan lengkap untuk penanganan cepat.', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754738558/ugd_idu6bk.jpg', aiHint: 'emergency room' },
-    { id: 'ruang-operasi', name: 'Ruang Operasi Modern', description: 'Dilengkapi teknologi bedah terkini untuk prosedur operasi yang aman dan steril.', imageUrl: 'https://placehold.co/600x400.png', aiHint: 'operating room' }, 
-    { id: 'ambulans', name: 'Ambulans Gawat Darurat', description: 'Armada siaga 24 jam dengan peralatan medis darurat untuk rujukan pasien.', imageUrl: 'https://placehold.co/600x400.png', aiHint: 'ambulance vehicle' }, 
-    { id: 'parkir', name: 'Area Parkir Luas', description: 'Menyediakan area parkir yang luas, aman, dan nyaman untuk pengunjung.', imageUrl: 'https://placehold.co/600x400.png', aiHint: 'parking lot' }
-];
-
-export const doctorsData: Doctor[] = [
-  { id: '1', name: 'Dr. Budi Santoso', specialty: 'Penyakit Dalam', schedule: 'Senin, Rabu, Jumat (09:00 - 12:00)', imageUrl: 'https://placehold.co/100x100.png', aiHint: 'male doctor', status: 'Praktek' },
-  { id: '2', name: 'Dr. Anisa Putri', specialty: 'Anak', schedule: 'Selasa, Kamis (10:00 - 13:00)', imageUrl: 'https://placehold.co/100x100.png', aiHint: 'female doctor', status: 'Praktek' },
-  { id: '3', name: 'Dr. Cahyo Nugroho', specialty: 'Kandungan & Ginekologi', schedule: 'Senin, Rabu (14:00 - 17:00)', imageUrl: 'https://placehold.co/100x100.png', aiHint: 'doctor portrait', status: 'Praktek' },
-  { id: '4', name: 'Dr. Dewi Lestari', specialty: 'Jantung', schedule: 'Jumat (13:00 - 16:00)', imageUrl: 'https://placehold.co/100x100.png', aiHint: 'female professional', status: 'Tutup', statusInfo: 'Cuti hingga 30 Des 2024' },
-  { id: '5', name: 'Dr. Eko Prasetyo', specialty: 'Bedah Umum', schedule: 'Selasa, Kamis (16:00 - 19:00)', imageUrl: 'https://placehold.co/100x100.png', aiHint: 'male surgeon', status: 'Praktek' },
-  { id: '6', name: 'Dr. Fitriani', specialty: 'THT', schedule: 'Rabu (08:00 - 11:00)', imageUrl: 'https://placehold.co/100x100.png', aiHint: 'woman doctor', status: 'Praktek' },
-];
-
 export const quickAccessItems = (t: (key: string) => string, navigate: (path: string) => void) => [
     { icon: UserSearch, title: t('cariNamaDokter'), subtitle: 'Temukan spesialis kami', action: () => navigate('/doctors') },
     { icon: MessageCircle, title: 'Pendaftaran WhatsApp', subtitle: 'Daftar online via WA', action: () => window.open(`https://wa.me/6282151545477?text=${encodeURIComponent(t('waRegistration'))}`, '_blank') },
