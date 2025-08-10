@@ -5,7 +5,7 @@ let firebaseAdmin: admin.app.App;
 function initializeFirebaseAdmin() {
   const serviceAccount = {
     projectId: process.env.FIREBASE_PROJECT_ID,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    privateKey: process.env.FIREBASE_PRIVATE_KEY,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
   };
 
@@ -15,8 +15,13 @@ function initializeFirebaseAdmin() {
   }
 
   try {
+    const parsedPrivateKey = JSON.parse(`"${serviceAccount.privateKey}"`);
     return admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+        credential: admin.credential.cert({
+            projectId: serviceAccount.projectId,
+            clientEmail: serviceAccount.clientEmail,
+            privateKey: parsedPrivateKey,
+        }),
     });
   } catch(e) {
       console.error("Firebase Admin SDK initialization failed.", e);
