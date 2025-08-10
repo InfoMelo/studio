@@ -4,12 +4,11 @@
 import { useEffect, useState, createContext, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
-import type { User } from 'firebase/auth';
+import { signOut, type User } from 'firebase/auth';
 import { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarHeader, SidebarFooter } from "@/components/ui/sidebar"
 import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users, Briefcase, LogOut, Loader } from "lucide-react"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { logout } from "../login/actions";
 
 // 1. Create Auth Context
 const AuthContext = createContext<{ user: User | null }>({ user: null });
@@ -68,7 +67,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   const handleLogout = async () => {
-    await logout();
+    await signOut(auth);
     router.push('/login');
   };
 
