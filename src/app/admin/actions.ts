@@ -1,54 +1,11 @@
 
 'use server';
 
-import { getFirebaseAdmin } from '@/lib/firebase-admin';
-import { collection, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, writeBatch, orderBy, Timestamp, getCountFromServer } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, DocumentData, getDoc, query, writeBatch, orderBy, Timestamp } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import type { Doctor, Service, Facility, Article, Partner, Vacancy } from '@/lib/types';
 import * as XLSX from 'xlsx';
 import { db } from '@/lib/firebase';
-
-// Dashboard Actions
-export async function getAdminDashboardStats() {
-    try {
-        const adminDb = getFirebaseAdmin().firestore();
-        const doctorsCol = adminDb.collection('doctors');
-        const servicesCol = adminDb.collection('services');
-        const articlesCol = adminDb.collection('articles');
-        const partnersCol = adminDb.collection('partners');
-
-        const [doctorsSnapshot, servicesSnapshot, articlesSnapshot, partnersSnapshot] = await Promise.all([
-            doctorsCol.count().get(),
-            servicesCol.count().get(),
-            articlesCol.count().get(),
-            partnersCol.count().get(),
-        ]);
-
-        const doctors = await getDoctors();
-        const doctorSpecialtyDistribution = doctors.reduce((acc: { [key: string]: number }, doctor) => {
-            acc[doctor.specialty] = (acc[doctor.specialty] || 0) + 1;
-            return acc;
-        }, {});
-
-        const chartData = Object.entries(doctorSpecialtyDistribution)
-            .map(([name, count]) => ({ name, count }))
-            .sort((a, b) => b.count - a.count);
-
-
-        return {
-            totalDoctors: doctorsSnapshot.data().count,
-            totalServices: servicesSnapshot.data().count,
-            totalArticles: articlesSnapshot.data().count,
-            totalPartners: partnersSnapshot.data().count,
-            doctorSpecialtyDistribution: chartData,
-        }
-    } catch (error) {
-        console.error("Error getting admin dashboard stats:", error);
-        // Provide a clear error structure for the client to handle
-        return null;
-    }
-}
-
 
 // Doctors Actions
 export async function getDoctors(): Promise<Doctor[]> {
