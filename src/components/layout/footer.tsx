@@ -34,11 +34,11 @@ export default function Footer() {
           <div className="md:col-span-1 space-y-4">
             <Link href="/" className="flex items-center gap-3">
                <Image
-                src="https://res.cloudinary.com/ddyqhlilj/image/upload/v1754702167/M_1_1_kwckeh.png"
+                src="https://res.cloudinary.com/ddyqhlilj/image/upload/v1754800465/logo_meloy_l6pnrf.svg"
                 alt="Logo RSU Meloy"
                 width={40}
                 height={40}
-                className="object-contain bg-white rounded-full p-1"
+                className="object-contain"
               />
               <h3 className="text-xl font-bold">RSU Meloy</h3>
             </Link>

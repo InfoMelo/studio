@@ -61,7 +61,7 @@ const hospitalSchema = {
   "@type": "Hospital",
   "name": "RSU Meloy",
   "url": "https://websitersmeloy.web.app/",
-  "logo": "https://res.cloudinary.com/ddyqhlilj/image/upload/v1754702167/M_1_1_kwckeh.png",
+  "logo": "https://res.cloudinary.com/ddyqhlilj/image/upload/v1754800465/logo_meloy_l6pnrf.svg",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Jl. Yos Sudarso II No.101",
