@@ -2,7 +2,7 @@
 'use client';
 
 import LanguageSwitcher from '@/components/common/language-switcher';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import { Mail, Phone } from 'lucide-react';
 import { Button } from '../ui/button';
 
@@ -24,7 +24,7 @@ const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
 )
 
 export default function TopBar() {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
   const waUrl = `https://wa.me/6282151545477?text=${encodeURIComponent(t('waRegistration'))}`;
 
   return (

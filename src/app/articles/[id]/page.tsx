@@ -7,7 +7,7 @@ import { id } from 'date-fns/locale';
 import { Calendar, User } from 'lucide-react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
-import { LanguageProvider } from '@/contexts/language-context';
+import { LanguageProvider } from '@/hooks/language-context';
 import type { Metadata } from 'next';
 import type { Article } from '@/lib/types';
 

@@ -1,7 +1,8 @@
+
 'use client';
 
 import Image from 'next/image';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import SectionHeader from '@/components/common/section-header';
 import { Card, CardContent } from '@/components/ui/card';
 import ArticlesList from './articles';
@@ -17,7 +18,7 @@ interface AboutPageProps {
 }
 
 const ProfileContent = () => {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start mt-8">
       <div className="space-y-4">
@@ -58,7 +59,7 @@ const DefaultContent = ({ title }: { title: string }) => (
 );
 
 export default function AboutPage({ subPage, articles, partners, vacancies }: AboutPageProps) {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
 
   const renderContent = () => {
     switch(subPage) {

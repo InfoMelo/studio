@@ -1,5 +1,5 @@
 
-import { LanguageProvider } from '@/contexts/language-context';
+import { LanguageProvider } from '@/hooks/language-context';
 import ContactPage from '@/components/pages/contact';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';

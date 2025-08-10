@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -13,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu, ChevronDown, X } from 'lucide-react';
 import TopBar from './top-bar';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import { getNavItems } from '@/lib/data';
 import {
   Accordion,
@@ -24,7 +25,7 @@ import {
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
   const navItems = getNavItems(t);
   const router = useRouter();
 

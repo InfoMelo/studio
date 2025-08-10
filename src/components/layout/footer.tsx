@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import { Button } from '@/components/ui/button';
 import { Facebook, Instagram, MapPin, Phone, Mail } from 'lucide-react';
 import Image from 'next/image';
@@ -25,7 +26,7 @@ const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 
 export default function Footer() {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
 
   return (
     <footer className="bg-primary text-primary-foreground">

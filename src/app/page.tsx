@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import HomePage from '@/components/pages/home';
-import { LanguageProvider } from '@/contexts/language-context';
+import { LanguageProvider } from '@/hooks/language-context';
 import { getServices, getPartners } from './admin/actions';
 
 export default async function Home() {

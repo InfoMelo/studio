@@ -6,14 +6,14 @@ import { MapPin, Briefcase, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import SectionHeader from '../common/section-header';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 
 interface VacanciesListProps {
   vacancies: Vacancy[];
 }
 
 export default function VacanciesList({ vacancies }: VacanciesListProps) {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
 
   return (
     <div className="mt-12">

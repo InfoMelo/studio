@@ -1,8 +1,10 @@
 
+'use client';
+
 import Image from 'next/image';
 import type { Partner } from '@/lib/types';
 import { Card } from '@/components/ui/card';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import SectionHeader from '../common/section-header';
 
 interface PartnersListProps {
@@ -10,7 +12,7 @@ interface PartnersListProps {
 }
 
 export default function PartnersList({ partners }: PartnersListProps) {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
 
   return (
     <div className="mt-12">

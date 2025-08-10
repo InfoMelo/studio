@@ -3,7 +3,7 @@
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import SectionHeader from '@/components/common/section-header';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import type { Doctor } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -23,7 +23,7 @@ interface DoctorSchedulePageProps {
 }
 
 export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: DoctorSchedulePageProps) {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [activeSpecialty, setActiveSpecialty] = useState('Semua');
   const [filteredDoctorIds, setFilteredDoctorIds] = useState<string[] | null>(null);

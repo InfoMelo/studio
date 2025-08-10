@@ -2,7 +2,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import SectionHeader from '@/components/common/section-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Facility } from '@/lib/types';
@@ -12,7 +12,7 @@ interface FacilitiesPageProps {
 }
 
 export default function FacilitiesPage({ facilities }: FacilitiesPageProps) {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
 
   if (!facilities) {
      return <div className="py-16 md:py-24 text-center">Memuat fasilitas...</div>;

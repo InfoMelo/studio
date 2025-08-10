@@ -4,7 +4,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import { quickAccessItems } from '@/lib/data';
 import SectionHeader from '@/components/common/section-header';
 import { Button } from '@/components/ui/button';
@@ -34,7 +34,7 @@ interface HomePageProps {
 }
 
 export default function HomePage({ services, partners }: HomePageProps) {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
   const router = useRouter();
   const qai = quickAccessItems(t, (path: string) => router.push(path));
   const whyUs = whyUsItems(t);

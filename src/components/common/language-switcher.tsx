@@ -1,10 +1,11 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 
 export default function LanguageSwitcher() {
-  const { language, setLanguage } = useLocalization();
+  const { language, setLanguage } = useLanguage();
 
   return (
     <div className="flex items-center rounded-full border border-primary-foreground/50 p-0.5">

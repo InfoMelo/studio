@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useLocalization } from '@/hooks/use-localization';
+import { useLanguage } from '@/hooks/use-language';
 import SectionHeader from '@/components/common/section-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Phone, Mail } from 'lucide-react';
@@ -25,7 +25,7 @@ const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
 )
 
 export default function ContactPage() {
-  const { t } = useLocalization();
+  const { t } = useLanguage();
 
   const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=RSU+Meloy+Sangatta";
   const waUrl = `https://wa.me/6282151545477?text=${encodeURIComponent(t('waRegistration'))}`;
