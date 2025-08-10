@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -12,6 +13,10 @@ interface FacilitiesPageProps {
 
 export default function FacilitiesPage({ facilities }: FacilitiesPageProps) {
   const { t } = useLocalization();
+
+  if (!facilities) {
+     return <div className="py-16 md:py-24 text-center">Memuat fasilitas...</div>;
+  }
 
   return (
     <div className="py-16 md:py-24 bg-secondary animate-fade-in">

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
@@ -14,6 +15,7 @@ import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
+import DownloadScheduleButton from './DownloadScheduleButton';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
@@ -30,6 +32,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   const specialties = useMemo(() => {
+    if (!doctors) return ['Semua'];
     return ['Semua', ...Array.from(new Set(doctors.map(doc => doc.specialty)))];
   }, [doctors]);
 
@@ -54,20 +57,20 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
     }
   }, [debouncedSearchTerm, performSearch]);
   
+  const doctorsBySpecialty = useMemo(() => {
+     if (activeSpecialty === 'Semua') {
+      return doctors;
+    }
+    return doctors.filter(doc => doc.specialty === activeSpecialty);
+  }, [activeSpecialty, doctors]);
+
   const displayedDoctors = useMemo(() => {
-    let currentDoctors = doctors;
-    
     if (debouncedSearchTerm && filteredDoctorIds) {
         const idSet = new Set(filteredDoctorIds);
-        currentDoctors = currentDoctors.filter(doc => idSet.has(doc.docId || ''));
+        return doctors.filter(doc => idSet.has(doc.docId || ''));
     }
-    
-    if (activeSpecialty !== 'Semua') {
-      return currentDoctors.filter(doc => doc.specialty === activeSpecialty);
-    }
-    
-    return currentDoctors;
-  }, [debouncedSearchTerm, filteredDoctorIds, activeSpecialty, doctors]);
+    return doctorsBySpecialty;
+  }, [debouncedSearchTerm, filteredDoctorIds, doctors, doctorsBySpecialty]);
 
 
   const getTooltipContent = (doctor: Doctor) => {
@@ -80,6 +83,17 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
     return 'Dokter sedang membuka praktek sesuai jadwal.';
   }
 
+  if (!doctors) {
+    return (
+      <div className="py-16 md:py-24 bg-background animate-fade-in min-h-[80vh]">
+        <div className="container px-4 md:px-6">
+           <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
+           <div className="text-center py-12 text-muted-foreground">Memuat data dokter...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <TooltipProvider>
       <div className="py-16 md:py-24 bg-background animate-fade-in min-h-[80vh]">
@@ -87,7 +101,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
           <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
           
           <Card className="p-4 md:p-6 mb-8 mt-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
               <div className="md:col-span-2">
                 <Input
                   placeholder={t('cariNamaDokter')}
@@ -96,8 +110,8 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
                   className="text-base"
                 />
               </div>
-              <div>
-                <Select value={activeSpecialty} onValueChange={setActiveSpecialty}>
+              <div className="flex gap-2">
+                 <Select value={activeSpecialty} onValueChange={setActiveSpecialty}>
                   <SelectTrigger className="text-base">
                     <SelectValue placeholder={t('pilihSpesialisasi')} />
                   </SelectTrigger>
@@ -105,6 +119,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
                     {specialties.map(spec => <SelectItem key={spec} value={spec}>{spec}</SelectItem>)}
                   </SelectContent>
                 </Select>
+                <DownloadScheduleButton doctors={doctorsBySpecialty} specialty={activeSpecialty} />
               </div>
             </div>
           </Card>

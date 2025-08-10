@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useLocalization } from '@/hooks/use-localization';
@@ -12,6 +13,10 @@ interface ServicesPageProps {
 
 export default function ServicesPage({ services }: ServicesPageProps) {
   const { t } = useLocalization();
+
+  if (!services) {
+    return <div className="py-16 md:py-24 text-center">Memuat layanan...</div>;
+  }
 
   return (
     <div className="py-16 md:py-24 bg-secondary animate-fade-in">
