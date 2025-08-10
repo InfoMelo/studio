@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -135,7 +134,7 @@ export default function HomePage({ services, partners }: HomePageProps) {
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('pusatKeunggulan')} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {services.slice(0, 6).map(service => (
+            {services && services.slice(0, 6).map(service => (
             <Card key={service.docId} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
                 <Image src={service.iconUrl} alt={service.name} width={48} height={48} className="h-12 w-12 text-primary mb-4 object-contain" />
                 <CardTitle className="mb-2 text-xl">{service.name}</CardTitle>
@@ -151,7 +150,7 @@ export default function HomePage({ services, partners }: HomePageProps) {
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('mitraKami')} subtitle={t('mitraSubtitle')} />
           <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
-            {partners.slice(0, 8).map((partner) => (
+            {partners && partners.slice(0, 8).map((partner) => (
               <div key={partner.docId} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
                 <Image
                   src={partner.imageUrl}
