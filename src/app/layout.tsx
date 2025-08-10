@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Suspense } from 'react';
 import { PT_Sans } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import LoadingLogo from '@/components/common/loading-logo';
 
 const ptSans = PT_Sans({
   subsets: ['latin'],
@@ -90,7 +91,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className='h-screen w-full flex items-center justify-center'><LoadingLogo /></div>}>
           {children}
         </Suspense>
         <Toaster />

@@ -6,6 +6,7 @@ import Footer from '@/components/layout/footer';
 import type { Metadata } from 'next';
 import { getFacilities } from '../admin/actions';
 import { Suspense } from 'react';
+import LoadingLogo from '@/components/common/loading-logo';
 
 export const metadata: Metadata = {
   title: 'Fasilitas Rumah Sakit',
@@ -23,7 +24,7 @@ export default async function Facilities() {
             <div className="flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<div className='h-screen w-full flex items-center justify-center'><LoadingLogo /></div>}>
                         <FacilitiesPage facilities={facilities} />
                     </Suspense>
                 </main>

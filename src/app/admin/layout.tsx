@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { signOut, type User } from 'firebase/auth';
 import { Sidebar, SidebarProvider, SidebarTrigger, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarHeader, SidebarFooter } from "@/components/ui/sidebar"
-import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users, Briefcase, LogOut, Loader } from "lucide-react"
+import { LayoutDashboard, Stethoscope, HeartPulse, Building, FileText, Users, Briefcase, LogOut } from "lucide-react"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import LoadingLogo from '@/components/common/loading-logo';
 
 // 1. Create Auth Context
 const AuthContext = createContext<{ user: User | null }>({ user: null });
@@ -36,9 +37,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Loader className="h-8 w-8 animate-spin" />
-        <p className="ml-4 text-lg">Memverifikasi sesi...</p>
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-4">
+        <LoadingLogo />
+        <p className="text-lg text-muted-foreground">Memverifikasi sesi...</p>
       </div>
     );
   }

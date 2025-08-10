@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import DoctorPageContent from './DoctorPageContent';
 import type { Metadata } from 'next';
 import { getDoctors } from '../admin/actions';
+import LoadingLogo from '@/components/common/loading-logo';
 
 export const metadata: Metadata = {
   title: 'Jadwal Dokter',
@@ -23,7 +24,7 @@ export default async function DoctorsPage() {
             <div className="flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div className='h-screen w-full flex items-center justify-center'><LoadingLogo /></div>}>
                     <DoctorPageContent doctors={doctors} />
                   </Suspense>
                 </main>

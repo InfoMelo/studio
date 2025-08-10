@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import AboutPageContent from './AboutPageContent';
 import { getArticles, getPartners, getVacancies } from '../admin/actions';
+import LoadingLogo from '@/components/common/loading-logo';
 
 export const metadata: Metadata = {
   title: 'Profil Rumah Sakit',
@@ -26,7 +27,7 @@ export default async function About() {
       <div className="flex min-h-screen flex-col">
         <Header />
         <main className="flex-1">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div className='h-screen w-full flex items-center justify-center'><LoadingLogo /></div>}>
             <AboutPageContent articles={articles} partners={partners} vacancies={vacancies} />
           </Suspense>
         </main>

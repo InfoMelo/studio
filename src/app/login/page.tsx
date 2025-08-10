@@ -14,7 +14,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal, Loader } from 'lucide-react';
+import { Terminal } from 'lucide-react';
+import LoadingLogo from '@/components/common/loading-logo';
 
 const loginFormSchema = z.object({
   email: z.string().email({ message: "Format email tidak valid." }),
@@ -78,8 +79,8 @@ export default function LoginPage() {
 
     if (loading) {
         return (
-            <div className="flex h-screen w-full items-center justify-center">
-                <Loader className="h-8 w-8 animate-spin" />
+            <div className="flex h-screen w-full items-center justify-center bg-secondary">
+                <LoadingLogo />
             </div>
         );
     }
