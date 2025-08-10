@@ -2,10 +2,56 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, where, writeBatch, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, where, writeBatch, orderBy, Timestamp,getCountFromServer } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import type { Doctor, Service, Facility, Article, Partner, Vacancy } from '@/lib/types';
 import * as XLSX from 'xlsx';
+
+// Dashboard Actions
+export async function getAdminDashboardStats() {
+    try {
+        const doctorsCol = collection(db, 'doctors');
+        const servicesCol = collection(db, 'services');
+        const articlesCol = collection(db, 'articles');
+        const partnersCol = collection(db, 'partners');
+
+        const [doctorsSnapshot, servicesSnapshot, articlesSnapshot, partnersSnapshot] = await Promise.all([
+            getCountFromServer(doctorsCol),
+            getCountFromServer(servicesCol),
+            getCountFromServer(articlesCol),
+            getCountFromServer(partnersCol),
+        ]);
+
+        const doctors = await getDoctors();
+        const doctorSpecialtyDistribution = doctors.reduce((acc: { [key: string]: number }, doctor) => {
+            acc[doctor.specialty] = (acc[doctor.specialty] || 0) + 1;
+            return acc;
+        }, {});
+
+        const chartData = Object.entries(doctorSpecialtyDistribution)
+            .map(([name, count]) => ({ name, count }))
+            .sort((a, b) => b.count - a.count);
+
+
+        return {
+            totalDoctors: doctorsSnapshot.data().count,
+            totalServices: servicesSnapshot.data().count,
+            totalArticles: articlesSnapshot.data().count,
+            totalPartners: partnersSnapshot.data().count,
+            doctorSpecialtyDistribution: chartData,
+        }
+    } catch (error) {
+        console.error("Error getting admin dashboard stats:", error);
+        return {
+            totalDoctors: 0,
+            totalServices: 0,
+            totalArticles: 0,
+            totalPartners: 0,
+            doctorSpecialtyDistribution: [],
+        }
+    }
+}
+
 
 // Doctors Actions
 export async function getDoctors(): Promise<Doctor[]> {
@@ -30,6 +76,7 @@ export async function addDoctor(doctor: Omit<Doctor, 'id' | 'docId'>) {
     await addDoc(doctorsCol, newDoctor);
     revalidatePath('/admin/doctors');
     revalidatePath('/doctors');
+    revalidatePath('/admin');
 }
 
 export async function updateDoctor(docId: string, doctor: Partial<Doctor>) {
@@ -37,6 +84,7 @@ export async function updateDoctor(docId: string, doctor: Partial<Doctor>) {
     await updateDoc(doctorRef, doctor);
     revalidatePath('/admin/doctors');
     revalidatePath('/doctors');
+    revalidatePath('/admin');
 }
 
 export async function deleteDoctor(docId: string) {
@@ -44,6 +92,7 @@ export async function deleteDoctor(docId: string) {
     await deleteDoc(doctorRef);
     revalidatePath('/admin/doctors');
     revalidatePath('/doctors');
+    revalidatePath('/admin');
 }
 
 export async function bulkAddDoctors(fileBase64: string): Promise<{ success: boolean; count?: number; error?: string }> {
@@ -93,6 +142,7 @@ export async function bulkAddDoctors(fileBase64: string): Promise<{ success: boo
     await batch.commit();
     revalidatePath('/admin/doctors');
     revalidatePath('/doctors');
+    revalidatePath('/admin');
     return { success: true, count };
 
   } catch (error) {
@@ -124,6 +174,7 @@ export async function addService(service: Omit<Service, 'id' | 'docId'>) {
     revalidatePath('/admin/services');
     revalidatePath('/services');
     revalidatePath('/'); // For home page
+    revalidatePath('/admin');
 }
 
 export async function updateService(docId: string, service: Partial<Service>) {
@@ -132,6 +183,7 @@ export async function updateService(docId: string, service: Partial<Service>) {
     revalidatePath('/admin/services');
     revalidatePath('/services');
     revalidatePath('/'); // For home page
+    revalidatePath('/admin');
 }
 
 export async function deleteService(docId: string) {
@@ -140,6 +192,7 @@ export async function deleteService(docId: string) {
     revalidatePath('/admin/services');
     revalidatePath('/services');
     revalidatePath('/'); // For home page
+    revalidatePath('/admin');
 }
 
 // Facilities Actions
@@ -220,6 +273,7 @@ export async function addArticle(article: Omit<Article, 'id' | 'docId' | 'create
     await addDoc(articlesCol, newArticle);
     revalidatePath('/admin/articles');
     revalidatePath('/about');
+    revalidatePath('/admin');
 }
 
 export async function updateArticle(docId: string, article: Partial<Omit<Article, 'id' | 'docId' | 'createdAt'>>) {
@@ -228,6 +282,7 @@ export async function updateArticle(docId: string, article: Partial<Omit<Article
     revalidatePath('/admin/articles');
     revalidatePath(`/admin/articles/edit/${docId}`);
     revalidatePath('/about');
+    revalidatePath('/admin');
 }
 
 export async function deleteArticle(docId: string) {
@@ -235,6 +290,7 @@ export async function deleteArticle(docId: string) {
     await deleteDoc(articleRef);
     revalidatePath('/admin/articles');
     revalidatePath('/about');
+    revalidatePath('/admin');
 }
 
 
@@ -260,6 +316,7 @@ export async function addPartner(partner: Omit<Partner, 'id' | 'docId'>) {
     await addDoc(partnersCol, newPartner);
     revalidatePath('/admin/partners');
     revalidatePath('/');
+    revalidatePath('/admin');
 }
 
 export async function updatePartner(docId: string, partner: Partial<Partner>) {
@@ -267,6 +324,7 @@ export async function updatePartner(docId: string, partner: Partial<Partner>) {
     await updateDoc(partnerRef, partner);
     revalidatePath('/admin/partners');
     revalidatePath('/');
+    revalidatePath('/admin');
 }
 
 export async function deletePartner(docId: string) {
@@ -274,6 +332,7 @@ export async function deletePartner(docId: string) {
     await deleteDoc(partnerRef);
     revalidatePath('/admin/partners');
     revalidatePath('/');
+    revalidatePath('/admin');
 }
 
 // Vacancy Actions
