@@ -15,32 +15,37 @@ export async function handleSmartSearch(query: string): Promise<{ correctedQuery
   const doctorNames = doctors.map(d => d.name);
   const serviceNames = servicesData.map(s => s.name);
   const availableOptions = [...new Set([...doctorNames, ...serviceNames])];
+  let aiFailed = false;
 
   try {
     const aiResponse = await smartSearch({ query, availableOptions });
     
-    const matchedDoctorNames = new Set(aiResponse.results.filter(r => doctorNames.includes(r)));
-    const filteredDoctors = doctors.filter(d => matchedDoctorNames.has(d.name));
-    
-    // If AI returns nothing, maybe do a fallback search
-    if (filteredDoctors.length > 0) {
-      return {
-        correctedQuery: aiResponse.correctedQuery,
-        results: filteredDoctors.map(d => d.id),
-      };
+    // Check if AI response yields any valid doctors
+    if (aiResponse && aiResponse.results.length > 0) {
+      const matchedDoctorNames = new Set(aiResponse.results.filter(r => doctorNames.includes(r)));
+      const filteredDoctors = doctors.filter(d => matchedDoctorNames.has(d.name));
+      
+      if (filteredDoctors.length > 0) {
+        return {
+          correctedQuery: aiResponse.correctedQuery,
+          results: filteredDoctors.map(d => d.id),
+        };
+      }
     }
   } catch (error) {
-    console.error('Smart search failed:', error);
+    console.error('Smart search failed, falling back to simple search:', error);
+    aiFailed = true;
   }
 
-  // Fallback to simple search if AI fails or returns no matches
+  // Fallback to simple search if AI fails or returns no valid matches
   const lowerCaseQuery = query.toLowerCase();
   const fallbackDoctors = doctors.filter(d => 
       d.name.toLowerCase().includes(lowerCaseQuery) ||
       d.specialty.toLowerCase().includes(lowerCaseQuery)
   );
+  
   return {
-    correctedQuery: query,
+    correctedQuery: query, // Return original query on fallback
     results: fallbackDoctors.map(d => d.id),
   };
 }

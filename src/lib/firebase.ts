@@ -6,13 +6,18 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAL5yB4xg51uj2o85wB5arzMl3wPAQUQ00",
-  authDomain: "websitersmeloy.firebaseapp.com",
-  projectId: "websitersmeloy",
-  storageBucket: "websitersmeloy.firebasestorage.app",
-  messagingSenderId: "504002369942",
-  appId: "1:504002369942:web:f48b2af2e26b282ace25b7"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
+
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  throw new Error("Missing Firebase client configuration. Please set NEXT_PUBLIC_FIREBASE_API_KEY and other related variables in your .env.local file.");
+}
+
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();

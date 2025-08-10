@@ -13,24 +13,21 @@ function initializeFirebaseAdmin() {
     throw new Error('Firebase service account environment variables (FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL) are not set. Please add them to your .env.local file.');
   }
 
-  if (!admin.apps.length) {
-      try {
-          firebaseAdmin = admin.initializeApp({
-              credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-          });
-      } catch(e) {
-          console.error("Firebase Admin SDK initialization failed.", e);
-          throw new Error("Invalid Firebase Admin SDK configuration.");
-      }
-  } else {
-    firebaseAdmin = admin.app();
+  try {
+    return admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+    });
+  } catch(e) {
+      console.error("Firebase Admin SDK initialization failed.", e);
+      throw new Error("Invalid Firebase Admin SDK configuration.");
   }
-  return firebaseAdmin;
 }
 
 export const getFirebaseAdmin = () => {
-  if (!firebaseAdmin) {
-    return initializeFirebaseAdmin();
+  if (!admin.apps.length) {
+    firebaseAdmin = initializeFirebaseAdmin();
+  } else {
+    firebaseAdmin = admin.app();
   }
   return firebaseAdmin;
 }
