@@ -31,8 +31,8 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   const specialties = useMemo(() => {
-    return [t('semua'), ...Array.from(new Set(doctors.map(doc => doc.specialty)))];
-  }, [t, doctors]);
+    return ['Semua', ...Array.from(new Set(doctors.map(doc => doc.specialty)))];
+  }, [doctors]);
 
   const performSearch = useCallback(async (term: string) => {
     if (!term.trim()) {
@@ -42,11 +42,10 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
     }
     setSearchLoading(true);
 
-    const availableOptions = doctors.map(d => d.name);
-    const result = await handleSmartSearch({query: term, availableOptions });
+    const result = await handleSmartSearch(term);
     setFilteredDoctorIds(result.results);
     setSearchLoading(false);
-  }, [doctors]);
+  }, []);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -59,18 +58,17 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
   const displayedDoctors = useMemo(() => {
     let currentDoctors = doctors;
     
-    // When a search is active (even if results are empty)
     if (debouncedSearchTerm && filteredDoctorIds) {
         const idSet = new Set(filteredDoctorIds);
         currentDoctors = currentDoctors.filter(doc => idSet.has(doc.docId || ''));
     }
     
-    if (activeSpecialty !== t('semua')) {
+    if (activeSpecialty !== 'Semua') {
       return currentDoctors.filter(doc => doc.specialty === activeSpecialty);
     }
     
     return currentDoctors;
-  }, [debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t, doctors]);
+  }, [debouncedSearchTerm, filteredDoctorIds, activeSpecialty, doctors]);
 
 
   const getTooltipContent = (doctor: Doctor) => {
