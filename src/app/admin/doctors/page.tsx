@@ -10,10 +10,9 @@ import DoctorActions from "./DoctorActions";
 import BulkImportButton from "./BulkImportButton";
 import { Badge } from "@/components/ui/badge";
 import type { Doctor } from "@/lib/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default async function ManageDoctorsPage() {
-    const doctors = await getDoctors();
-
+function DoctorsTable({ doctors }: { doctors: Doctor[] }) {
     const getTooltipContent = (doctor: Doctor) => {
         if (doctor.status === 'Tutup' && doctor.statusInfo) {
           return doctor.statusInfo;
@@ -23,6 +22,77 @@ export default async function ManageDoctorsPage() {
         }
         return 'Dokter sedang membuka praktek sesuai jadwal.';
     }
+
+    return (
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Nama</TableHead>
+                    <TableHead>Spesialisasi</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Jadwal</TableHead>
+                    <TableHead className="text-right">Aksi</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {doctors.map((doctor) => (
+                    <TableRow key={doctor.docId}>
+                        <TableCell className="font-medium">{doctor.name}</TableCell>
+                        <TableCell>{doctor.specialty}</TableCell>
+                        <TableCell>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Badge variant={doctor.status === 'Praktek' ? 'default' : 'destructive'} className={`${doctor.status === 'Praktek' ? 'bg-green-600' : ''} text-white`}>
+                                        {doctor.status}
+                                    </Badge>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>{getTooltipContent(doctor)}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TableCell>
+                        <TableCell>{doctor.schedule}</TableCell>
+                        <TableCell className="text-right">
+                        <DoctorActions doctor={doctor} />
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    )
+}
+
+function TableSkeleton() {
+    return (
+        <div className="mt-4">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead><Skeleton className="h-5 w-32" /></TableHead>
+                        <TableHead><Skeleton className="h-5 w-40" /></TableHead>
+                        <TableHead><Skeleton className="h-5 w-24" /></TableHead>
+                        <TableHead><Skeleton className="h-5 w-48" /></TableHead>
+                        <TableHead className="text-right"><Skeleton className="h-5 w-16" /></TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                        <TableRow key={index}>
+                            <TableCell><Skeleton className="h-5 w-full" /></TableCell>
+                            <TableCell><Skeleton className="h-5 w-full" /></TableCell>
+                            <TableCell><Skeleton className="h-9 w-20 rounded-full" /></TableCell>
+                            <TableCell><Skeleton className="h-5 w-full" /></TableCell>
+                            <TableCell className="text-right"><Skeleton className="h-8 w-20" /></TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
+    )
+}
+
+export default async function ManageDoctorsPage() {
+    const doctors = await getDoctors();
 
     return (
         <TooltipProvider>
@@ -39,41 +109,7 @@ export default async function ManageDoctorsPage() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Nama</TableHead>
-                                <TableHead>Spesialisasi</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Jadwal</TableHead>
-                                <TableHead className="text-right">Aksi</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {doctors.map((doctor) => (
-                                <TableRow key={doctor.docId}>
-                                    <TableCell className="font-medium">{doctor.name}</TableCell>
-                                    <TableCell>{doctor.specialty}</TableCell>
-                                    <TableCell>
-                                        <Tooltip>
-                                            <TooltipTrigger>
-                                                <Badge variant={doctor.status === 'Praktek' ? 'default' : 'destructive'} className={`${doctor.status === 'Praktek' ? 'bg-green-600' : ''} text-white`}>
-                                                    {doctor.status}
-                                                </Badge>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>{getTooltipContent(doctor)}</p>
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TableCell>
-                                    <TableCell>{doctor.schedule}</TableCell>
-                                    <TableCell className="text-right">
-                                    <DoctorActions doctor={doctor} />
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    {doctors ? <DoctorsTable doctors={doctors} /> : <TableSkeleton />}
                 </CardContent>
             </Card>
         </TooltipProvider>

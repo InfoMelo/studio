@@ -10,6 +10,80 @@ import ArticleActions from "./ArticleActions";
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import type { Article } from "@/lib/types";
+import { Skeleton } from "@/components/ui/skeleton";
+
+function ArticlesTable({ articles }: { articles: Article[] }) {
+    return (
+        <>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Gambar</TableHead>
+                        <TableHead>Judul</TableHead>
+                        <TableHead>Penulis</TableHead>
+                        <TableHead>Tanggal Publikasi</TableHead>
+                        <TableHead className="text-right">Aksi</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {articles.map((article: Article) => (
+                        <TableRow key={article.docId}>
+                            <TableCell>
+                                <Image
+                                    src={article.imageUrl}
+                                    alt={article.title}
+                                    width={100}
+                                    height={60}
+                                    className="rounded-md object-cover"
+                                />
+                            </TableCell>
+                            <TableCell className="font-medium max-w-sm truncate">{article.title}</TableCell>
+                            <TableCell>{article.author}</TableCell>
+                            <TableCell>{format(new Date(article.createdAt), 'd MMM yyyy', { locale: id })}</TableCell>
+                            <TableCell className="text-right">
+                                <ArticleActions article={article} />
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+            {articles.length === 0 && (
+                <div className="text-center py-12 text-muted-foreground">
+                    <p>Belum ada artikel yang dibuat. Klik "Tambah Artikel" untuk memulai.</p>
+                </div>
+            )}
+        </>
+    );
+}
+
+function TableSkeleton() {
+    return (
+        <div className="mt-4">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead><Skeleton className="h-5 w-20" /></TableHead>
+                        <TableHead><Skeleton className="h-5 w-40" /></TableHead>
+                        <TableHead><Skeleton className="h-5 w-24" /></TableHead>
+                        <TableHead><Skeleton className="h-5 w-32" /></TableHead>
+                        <TableHead className="text-right"><Skeleton className="h-5 w-16" /></TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {Array.from({ length: 3 }).map((_, index) => (
+                        <TableRow key={index}>
+                            <TableCell><Skeleton className="h-16 w-24 rounded-md" /></TableCell>
+                            <TableCell><Skeleton className="h-5 w-full" /></TableCell>
+                            <TableCell><Skeleton className="h-5 w-full" /></TableCell>
+                            <TableCell><Skeleton className="h-5 w-full" /></TableCell>
+                            <TableCell className="text-right"><Skeleton className="h-8 w-20" /></TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
+    )
+}
 
 export default async function ManageArticlesPage() {
     const articles = await getArticles();
@@ -25,43 +99,7 @@ export default async function ManageArticlesPage() {
                 </Button>
             </CardHeader>
             <CardContent>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Gambar</TableHead>
-                            <TableHead>Judul</TableHead>
-                            <TableHead>Penulis</TableHead>
-                            <TableHead>Tanggal Publikasi</TableHead>
-                            <TableHead className="text-right">Aksi</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {articles.map((article: Article) => (
-                            <TableRow key={article.docId}>
-                                <TableCell>
-                                    <Image
-                                        src={article.imageUrl}
-                                        alt={article.title}
-                                        width={100}
-                                        height={60}
-                                        className="rounded-md object-cover"
-                                    />
-                                </TableCell>
-                                <TableCell className="font-medium max-w-sm truncate">{article.title}</TableCell>
-                                <TableCell>{article.author}</TableCell>
-                                <TableCell>{format(new Date(article.createdAt), 'd MMM yyyy', { locale: id })}</TableCell>
-                                <TableCell className="text-right">
-                                    <ArticleActions article={article} />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                 {articles.length === 0 && (
-                    <div className="text-center py-12 text-muted-foreground">
-                        <p>Belum ada artikel yang dibuat. Klik "Tambah Artikel" untuk memulai.</p>
-                    </div>
-                )}
+                {articles ? <ArticlesTable articles={articles} /> : <TableSkeleton />}
             </CardContent>
         </Card>
     )
