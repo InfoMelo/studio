@@ -5,7 +5,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocalization } from '@/hooks/use-localization';
-import { servicesData, quickAccessItems, partnersData } from '@/lib/data';
+import { quickAccessItems } from '@/lib/data';
 import SectionHeader from '@/components/common/section-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +14,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
+import type { Service, Partner } from '@/lib/types';
 
 const heroSlides = [
     { imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754745892/20250809_155010_nebhpv.jpg', titleKey: 'heroTitle', subtitleKey: 'heroSubtitle', aiHint: 'hospital building' },
@@ -27,7 +28,12 @@ const whyUsItems = (t: (key: string) => string) => [
     { title: t('kenyamananTitle'), desc: t('kenyamananDesc'), imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754741672/lobi_y0el0x.jpg', aiHint: 'hospital lobby' },
 ];
 
-export default function HomePage() {
+interface HomePageProps {
+  services: Service[];
+  partners: Partner[];
+}
+
+export default function HomePage({ services, partners }: HomePageProps) {
   const { t } = useLocalization();
   const router = useRouter();
   const qai = quickAccessItems(t, (path: string) => router.push(path));
@@ -129,8 +135,8 @@ export default function HomePage() {
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('pusatKeunggulan')} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {servicesData.slice(0, 6).map(service => (
-            <Card key={service.id} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
+            {services.slice(0, 6).map(service => (
+            <Card key={service.docId} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
                 <Image src={service.iconUrl} alt={service.name} width={48} height={48} className="h-12 w-12 text-primary mb-4 object-contain" />
                 <CardTitle className="mb-2 text-xl">{service.name}</CardTitle>
                 <CardDescription>{service.description}</CardDescription>
@@ -145,8 +151,8 @@ export default function HomePage() {
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('mitraKami')} subtitle={t('mitraSubtitle')} />
           <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
-            {partnersData.slice(0, 8).map((partner) => (
-              <div key={partner.id} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
+            {partners.slice(0, 8).map((partner) => (
+              <div key={partner.docId} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
                 <Image
                   src={partner.imageUrl}
                   alt={partner.name}
@@ -164,5 +170,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    

@@ -4,6 +4,8 @@ import ServicesPage from '@/components/pages/services';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import type { Metadata } from 'next';
+import { getServices } from '../admin/actions';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Layanan Medis',
@@ -14,13 +16,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Services() {
+export default async function Services() {
+    const services = await getServices();
     return (
         <LanguageProvider>
             <div className="flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">
-                    <ServicesPage />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <ServicesPage services={services} />
+                    </Suspense>
                 </main>
                 <Footer />
             </div>

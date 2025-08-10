@@ -3,11 +3,15 @@
 
 import Image from 'next/image';
 import { useLocalization } from '@/hooks/use-localization';
-import { facilitiesData } from '@/lib/data';
 import SectionHeader from '@/components/common/section-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Facility } from '@/lib/types';
 
-export default function FacilitiesPage() {
+interface FacilitiesPageProps {
+  facilities: Facility[];
+}
+
+export default function FacilitiesPage({ facilities }: FacilitiesPageProps) {
   const { t } = useLocalization();
 
   return (
@@ -15,8 +19,8 @@ export default function FacilitiesPage() {
       <div className="container px-4 md:px-6">
         <SectionHeader title={t('fasilitasTitle')} subtitle={t('fasilitasSubtitle')} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-          {facilitiesData.map((facility) => (
-            <Card key={facility.id} className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
+          {facilities.map((facility) => (
+            <Card key={facility.docId} className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
               <CardHeader className="p-0">
                 <Image
                   src={facility.imageUrl}
@@ -38,5 +42,3 @@ export default function FacilitiesPage() {
     </div>
   );
 }
-
-    

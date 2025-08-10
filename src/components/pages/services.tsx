@@ -2,12 +2,16 @@
 'use client';
 
 import { useLocalization } from '@/hooks/use-localization';
-import { servicesData } from '@/lib/data';
 import SectionHeader from '@/components/common/section-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
+import type { Service } from '@/lib/types';
 
-export default function ServicesPage() {
+interface ServicesPageProps {
+  services: Service[];
+}
+
+export default function ServicesPage({ services }: ServicesPageProps) {
   const { t } = useLocalization();
 
   return (
@@ -15,8 +19,8 @@ export default function ServicesPage() {
       <div className="container px-4 md:px-6">
         <SectionHeader title={t('layananTitle')} subtitle={t('layananSubtitle')} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-          {servicesData.map((service) => (
-              <Card key={service.id} className="text-center hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
+          {services.map((service) => (
+              <Card key={service.docId} className="text-center hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                     <div className="p-4 bg-primary/10 rounded-full">
@@ -35,5 +39,3 @@ export default function ServicesPage() {
     </div>
   );
 }
-
-    

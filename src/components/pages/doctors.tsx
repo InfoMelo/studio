@@ -4,7 +4,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import SectionHeader from '@/components/common/section-header';
 import { useLocalization } from '@/hooks/use-localization';
-import { doctorsData } from '@/lib/data';
 import type { Doctor } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -16,12 +15,14 @@ import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
+import { getServices } from '@/app/admin/actions';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
+  doctors: Doctor[];
 }
 
-export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSchedulePageProps) {
+export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: initialDoctors }: DoctorSchedulePageProps) {
   const { t } = useLocalization();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [activeSpecialty, setActiveSpecialty] = useState('Semua');
@@ -31,8 +32,8 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   const specialties = useMemo(() => {
-    return [t('semua'), ...new Set(doctorsData.map(doc => doc.specialty))];
-  }, [t]);
+    return [t('semua'), ...new Set(initialDoctors.map(doc => doc.specialty))];
+  }, [t, initialDoctors]);
 
   const performSearch = useCallback(async (term: string) => {
     if (!term.trim()) {
@@ -41,10 +42,15 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
         return;
     }
     setSearchLoading(true);
-    const result = await handleSmartSearch(term);
-    setFilteredDoctorIds(result);
+    // Also fetch services to include in search
+    const services = await getServices();
+    const serviceNames = services.map(s => s.name);
+    const doctorNames = initialDoctors.map(d => d.name);
+
+    const result = await handleSmartSearch({query: term, availableOptions: [...doctorNames, ...serviceNames] });
+    setFilteredDoctorIds(result.results);
     setSearchLoading(false);
-  }, []);
+  }, [initialDoctors]);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -55,11 +61,12 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
   }, [debouncedSearchTerm, performSearch]);
   
   const displayedDoctors = useMemo(() => {
-    let doctors = doctorsData;
-
+    let doctors = initialDoctors;
+    
+    // When a search is active (even if results are empty)
     if (debouncedSearchTerm && filteredDoctorIds) {
         const idSet = new Set(filteredDoctorIds);
-        doctors = doctors.filter(doc => idSet.has(doc.id));
+        doctors = doctors.filter(doc => idSet.has(doc.docId || ''));
     }
     
     if (activeSpecialty !== t('semua')) {
@@ -67,7 +74,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
     }
     
     return doctors;
-  }, [debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t]);
+  }, [debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t, initialDoctors]);
 
 
   const getTooltipContent = (doctor: Doctor) => {
@@ -123,7 +130,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
               ))
             ) : displayedDoctors.length > 0 ? (
               displayedDoctors.map((doc: Doctor) => (
-                <Card key={doc.id} className="transition-shadow hover:shadow-lg">
+                <Card key={doc.docId} className="transition-shadow hover:shadow-lg">
                   <CardContent className="p-4 md:p-6 flex items-start gap-4 md:gap-6">
                     <div className="p-2 bg-primary/10 rounded-full flex-shrink-0 mt-1">
                         <User className="h-16 w-16 text-primary" />
@@ -165,5 +172,3 @@ export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSch
     </TooltipProvider>
   );
 }
-
-    
