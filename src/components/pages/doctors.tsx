@@ -15,14 +15,13 @@ import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
-import { getServices } from '@/app/admin/actions';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
   doctors: Doctor[];
 }
 
-export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: initialDoctors }: DoctorSchedulePageProps) {
+export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: DoctorSchedulePageProps) {
   const { t } = useLocalization();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [activeSpecialty, setActiveSpecialty] = useState('Semua');
@@ -32,8 +31,8 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: in
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   const specialties = useMemo(() => {
-    return [t('semua'), ...new Set(initialDoctors.map(doc => doc.specialty))];
-  }, [t, initialDoctors]);
+    return [t('semua'), ...Array.from(new Set(doctors.map(doc => doc.specialty)))];
+  }, [t, doctors]);
 
   const performSearch = useCallback(async (term: string) => {
     if (!term.trim()) {
@@ -42,15 +41,12 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: in
         return;
     }
     setSearchLoading(true);
-    // Also fetch services to include in search
-    const services = await getServices();
-    const serviceNames = services.map(s => s.name);
-    const doctorNames = initialDoctors.map(d => d.name);
 
-    const result = await handleSmartSearch({query: term, availableOptions: [...doctorNames, ...serviceNames] });
+    const availableOptions = doctors.map(d => d.name);
+    const result = await handleSmartSearch({query: term, availableOptions });
     setFilteredDoctorIds(result.results);
     setSearchLoading(false);
-  }, [initialDoctors]);
+  }, [doctors]);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -61,20 +57,20 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: in
   }, [debouncedSearchTerm, performSearch]);
   
   const displayedDoctors = useMemo(() => {
-    let doctors = initialDoctors;
+    let currentDoctors = doctors;
     
     // When a search is active (even if results are empty)
     if (debouncedSearchTerm && filteredDoctorIds) {
         const idSet = new Set(filteredDoctorIds);
-        doctors = doctors.filter(doc => idSet.has(doc.docId || ''));
+        currentDoctors = currentDoctors.filter(doc => idSet.has(doc.docId || ''));
     }
     
     if (activeSpecialty !== t('semua')) {
-      return doctors.filter(doc => doc.specialty === activeSpecialty);
+      return currentDoctors.filter(doc => doc.specialty === activeSpecialty);
     }
     
-    return doctors;
-  }, [debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t, initialDoctors]);
+    return currentDoctors;
+  }, [debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t, doctors]);
 
 
   const getTooltipContent = (doctor: Doctor) => {
