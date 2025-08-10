@@ -1,26 +1,27 @@
 
+'use server';
 import * as admin from 'firebase-admin';
 
-// This is a critical security measure.
-// The service account key should NEVER be exposed to the client.
-// It should be stored securely as an environment variable on the server.
-const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT;
+const serviceAccount = {
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+};
 
-if (!serviceAccountKey) {
-  throw new Error('The FIREBASE_SERVICE_ACCOUNT environment variable is not set. Please add it to your .env.local file.');
+if (!serviceAccount.projectId || !serviceAccount.privateKey || !serviceAccount.clientEmail) {
+  throw new Error('Firebase service account environment variables (FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL) are not set. Please add them to your .env.local file.');
 }
 
 let firebaseAdmin: admin.app.App;
 
 if (!admin.apps.length) {
     try {
-        const serviceAccount = JSON.parse(serviceAccountKey);
         firebaseAdmin = admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
+            credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
         });
     } catch(e) {
-        console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT. Make sure it's a valid JSON string.", e);
-        throw new Error("Invalid FIREBASE_SERVICE_ACCOUNT configuration.");
+        console.error("Firebase Admin SDK initialization failed.", e);
+        throw new Error("Invalid Firebase Admin SDK configuration.");
     }
 } else {
   firebaseAdmin = admin.app();
