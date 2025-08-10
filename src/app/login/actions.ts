@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { getIronSession } from 'iron-session';
 import { Session, sessionOptions } from '@/lib/session';
-import { firebaseAdmin } from '@/lib/firebase-admin';
+import { getFirebaseAdmin } from '@/lib/firebase-admin';
 
 // This function dynamically gets session options and validates the password.
 // It's called only from Server Actions, where process.env is reliably available.
@@ -21,7 +21,7 @@ export async function createSession(idToken: string): Promise<{ success: boolean
   const finalSessionOptions = getSessionOptions();
   
   try {
-    const decodedToken = await firebaseAdmin.auth().verifyIdToken(idToken);
+    const decodedToken = await getFirebaseAdmin().auth().verifyIdToken(idToken);
     const { uid, email } = decodedToken;
     
     const session = await getIronSession<Session>(cookies(), finalSessionOptions);
