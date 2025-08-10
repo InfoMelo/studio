@@ -12,7 +12,7 @@ import { getFirebaseAdmin } from '@/lib/firebase-admin';
 function getSessionOptions() {
   const password = process.env.SECRET_COOKIE_PASSWORD;
   if (!password) {
-    throw new Error('SECRET_COOKIE_PASSWORD environment variable is not set.');
+    throw new Error('SECRET_COOKIE_PASSWORD environment variable is not set. Please ensure it is set in your environment variables.');
   }
   return { ...sessionOptions, password };
 }
