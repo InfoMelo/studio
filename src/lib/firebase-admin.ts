@@ -1,5 +1,4 @@
-'use server';
-import *a as admin from 'firebase-admin';
+import * as admin from 'firebase-admin';
 
 let firebaseAdmin: admin.app.App;
 
@@ -35,8 +34,3 @@ export const getFirebaseAdmin = () => {
   }
   return firebaseAdmin;
 }
-
-// Export a getter that can be used throughout the app
-Object.defineProperty(exports, "firebaseAdmin", {
-  get: () => getFirebaseAdmin(),
-});
