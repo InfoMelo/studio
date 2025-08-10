@@ -1,6 +1,4 @@
 
-'use server';
-
 import type { SessionOptions } from 'iron-session';
 
 export interface Session {
