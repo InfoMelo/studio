@@ -188,7 +188,7 @@ export default function HomePage({ services, partners }: HomePageProps) {
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('pusatKeunggulan')} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {services.slice(0, 6).map(service => (
+            {services && services.slice(0, 6).map(service => (
             <Card key={service.docId} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
                 {service.iconUrl && <Image src={service.iconUrl} alt={service.name} width={48} height={48} className="h-12 w-12 text-primary mb-4 object-contain" />}
                 <CardTitle className="mb-2 text-xl">{service.name}</CardTitle>
