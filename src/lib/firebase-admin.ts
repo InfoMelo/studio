@@ -10,7 +10,8 @@ function initializeFirebaseAdmin() {
   };
 
   if (!serviceAccount.projectId || !serviceAccount.privateKey || !serviceAccount.clientEmail) {
-    throw new Error('Firebase service account environment variables (FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL) are not set. Please add them to your .env.local file.');
+    // This will be loud, but it's better to fail early than to have a vague error later.
+    throw new Error('Firebase service account environment variables (FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL) are not set.');
   }
 
   try {

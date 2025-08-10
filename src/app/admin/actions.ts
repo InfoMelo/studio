@@ -1,25 +1,27 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, where, writeBatch, orderBy, Timestamp,getCountFromServer } from 'firebase/firestore';
+import { getFirebaseAdmin } from '@/lib/firebase-admin';
+import { collection, getDocs, doc, updateDoc, deleteDoc, DocumentData, getDoc, query, writeBatch, orderBy, Timestamp, getCountFromServer } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import type { Doctor, Service, Facility, Article, Partner, Vacancy } from '@/lib/types';
 import * as XLSX from 'xlsx';
+import { db } from '@/lib/firebase';
 
 // Dashboard Actions
 export async function getAdminDashboardStats() {
     try {
-        const doctorsCol = collection(db, 'doctors');
-        const servicesCol = collection(db, 'services');
-        const articlesCol = collection(db, 'articles');
-        const partnersCol = collection(db, 'partners');
+        const adminDb = getFirebaseAdmin().firestore();
+        const doctorsCol = adminDb.collection('doctors');
+        const servicesCol = adminDb.collection('services');
+        const articlesCol = adminDb.collection('articles');
+        const partnersCol = adminDb.collection('partners');
 
         const [doctorsSnapshot, servicesSnapshot, articlesSnapshot, partnersSnapshot] = await Promise.all([
-            getCountFromServer(doctorsCol),
-            getCountFromServer(servicesCol),
-            getCountFromServer(articlesCol),
-            getCountFromServer(partnersCol),
+            doctorsCol.count().get(),
+            servicesCol.count().get(),
+            articlesCol.count().get(),
+            partnersCol.count().get(),
         ]);
 
         const doctors = await getDoctors();
@@ -42,13 +44,8 @@ export async function getAdminDashboardStats() {
         }
     } catch (error) {
         console.error("Error getting admin dashboard stats:", error);
-        return {
-            totalDoctors: 0,
-            totalServices: 0,
-            totalArticles: 0,
-            totalPartners: 0,
-            doctorSpecialtyDistribution: [],
-        }
+        // Provide a clear error structure for the client to handle
+        return null;
     }
 }
 
@@ -398,3 +395,5 @@ export async function deleteVacancy(docId: string) {
     revalidatePath('/admin/vacancies');
     revalidatePath('/about');
 }
+
+    

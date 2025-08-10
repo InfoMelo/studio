@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Stethoscope, HeartPulse, FileText, Users } from "lucide-react";
+import { Stethoscope, HeartPulse, FileText, Users, AlertTriangle } from "lucide-react";
 import Link from 'next/link';
 import {
   ChartContainer,
@@ -10,6 +10,7 @@ import {
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from 'recharts';
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface StatCardProps {
   title: string;
@@ -116,7 +117,16 @@ interface DashboardClientProps {
 
 export default function DashboardClient({ stats }: DashboardClientProps) {
   if (!stats) {
-    return <DashboardSkeleton />;
+    return (
+        <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Gagal Memuat Statistik</AlertTitle>
+            <AlertDescription>
+                Tidak dapat memuat data statistik dashboard. Ini mungkin karena masalah izin atau konfigurasi Firebase Admin SDK. 
+                Pastikan variabel lingkungan (FIREBASE_PROJECT_ID, dll.) telah diatur dengan benar.
+            </AlertDescription>
+        </Alert>
+    );
   }
   
   const { totalDoctors, totalServices, totalArticles, totalPartners, doctorSpecialtyDistribution } = stats;
@@ -145,3 +155,5 @@ export default function DashboardClient({ stats }: DashboardClientProps) {
       </Suspense>
   )
 }
+
+    
