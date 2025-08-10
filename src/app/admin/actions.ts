@@ -56,9 +56,8 @@ export async function getAdminDashboardStats() {
 // Doctors Actions
 export async function getDoctors(): Promise<Doctor[]> {
     const doctorsCol = collection(db, 'doctors');
-    const doctorSnapshot = await getDocs(doctorsCol);
-    const doctorList = doctorSnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Doctor));
-    return doctorList.sort((a, b) => (a.name > b.name ? 1 : -1));
+    const doctorSnapshot = await getDocs(query(doctorsCol, orderBy('name')));
+    return doctorSnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Doctor));
 }
 
 export async function getDoctor(docId: string): Promise<Doctor | null> {
@@ -154,7 +153,7 @@ export async function bulkAddDoctors(fileBase64: string): Promise<{ success: boo
 // Services Actions
 export async function getServices(): Promise<Service[]> {
     const servicesCol = collection(db, 'services');
-    const serviceSnapshot = await getDocs(servicesCol);
+    const serviceSnapshot = await getDocs(query(servicesCol, orderBy('name')));
     return serviceSnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Service));
 }
 
@@ -198,7 +197,7 @@ export async function deleteService(docId: string) {
 // Facilities Actions
 export async function getFacilities(): Promise<Facility[]> {
     const facilitiesCol = collection(db, 'facilities');
-    const facilitySnapshot = await getDocs(facilitiesCol);
+    const facilitySnapshot = await getDocs(query(facilitiesCol, orderBy('name')));
     return facilitySnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Facility));
 }
 
@@ -297,7 +296,7 @@ export async function deleteArticle(docId: string) {
 // Partners Actions
 export async function getPartners(): Promise<Partner[]> {
     const partnersCol = collection(db, 'partners');
-    const partnerSnapshot = await getDocs(partnersCol);
+    const partnerSnapshot = await getDocs(query(partnersCol, orderBy('name')));
     return partnerSnapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id } as Partner));
 }
 
