@@ -56,7 +56,7 @@ export default function HomePage({ services, partners }: HomePageProps) {
                   className="brightness-50"
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/20" />
+                <div className="absolute inset-0 bg-black/50" />
                 <div className="container px-4 md:px-6 h-full relative flex items-center">
                   <div className="max-w-2xl text-white space-y-6 animate-fade-in">
                     <h1 className="text-4xl md:text-6xl font-bold font-headline">{t(slide.titleKey)}</h1>
