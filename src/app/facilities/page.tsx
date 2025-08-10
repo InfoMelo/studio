@@ -4,7 +4,6 @@ import FacilitiesPage from '@/components/pages/facilities';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import type { Metadata } from 'next';
-import { getFacilities } from '../admin/actions';
 
 export const metadata: Metadata = {
   title: 'Fasilitas Rumah Sakit',
@@ -15,14 +14,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Facilities() {
-    const facilities = await getFacilities();
+export default function Facilities() {
     return (
         <LanguageProvider>
             <div className="flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">
-                    <FacilitiesPage facilities={facilities} />
+                    <FacilitiesPage />
                 </main>
                 <Footer />
             </div>

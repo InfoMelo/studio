@@ -1,11 +1,11 @@
 
 import { LanguageProvider } from '@/contexts/language-context';
+import DoctorSchedulePage from '@/components/pages/doctors';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { Suspense } from 'react';
-import type { Metadata } from 'next';
 import DoctorPageContent from './DoctorPageContent';
-import { getDoctors } from '@/app/admin/actions';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Jadwal Dokter',
@@ -16,16 +16,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function DoctorsPage() {
-    const doctors = await getDoctors();
-
+export default function DoctorsPage() {
     return (
         <LanguageProvider>
             <div className="flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">
                   <Suspense fallback={<div>Loading...</div>}>
-                    <DoctorPageContent doctors={doctors} />
+                    <DoctorPageContent />
                   </Suspense>
                 </main>
                 <Footer />

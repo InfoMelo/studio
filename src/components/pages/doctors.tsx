@@ -4,6 +4,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import SectionHeader from '@/components/common/section-header';
 import { useLocalization } from '@/hooks/use-localization';
+import { doctorsData } from '@/lib/data';
 import type { Doctor } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -15,14 +16,12 @@ import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
-import DownloadScheduleButton from './DownloadScheduleButton';
 
 interface DoctorSchedulePageProps {
   initialSearchTerm?: string;
-  doctors: Doctor[];
 }
 
-export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: DoctorSchedulePageProps) {
+export default function DoctorSchedulePage({ initialSearchTerm = '' }: DoctorSchedulePageProps) {
   const { t } = useLocalization();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [activeSpecialty, setActiveSpecialty] = useState('Semua');
@@ -32,9 +31,8 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   const specialties = useMemo(() => {
-    if (!doctors) return [t('semua')];
-    return [t('semua'), ...new Set(doctors.map(doc => doc.specialty))];
-  }, [t, doctors]);
+    return [t('semua'), ...new Set(doctorsData.map(doc => doc.specialty))];
+  }, [t]);
 
   const performSearch = useCallback(async (term: string) => {
     if (!term.trim()) {
@@ -43,25 +41,10 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
         return;
     }
     setSearchLoading(true);
-    try {
-      const result = await handleSmartSearch(term);
-      setFilteredDoctorIds(result.results);
-    } catch(error) {
-        console.error("Smart search failed:", error);
-        if (doctors) {
-            const lowerCaseTerm = term.toLowerCase();
-            const fallbackResults = doctors.filter(d => 
-                d.name.toLowerCase().includes(lowerCaseTerm) ||
-                d.specialty.toLowerCase().includes(lowerCaseTerm)
-            ).map(d => d.id);
-            setFilteredDoctorIds(fallbackResults);
-        } else {
-            setFilteredDoctorIds([]);
-        }
-    } finally {
-      setSearchLoading(false);
-    }
-  }, [doctors]);
+    const result = await handleSmartSearch(term);
+    setFilteredDoctorIds(result);
+    setSearchLoading(false);
+  }, []);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -72,20 +55,19 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
   }, [debouncedSearchTerm, performSearch]);
   
   const displayedDoctors = useMemo(() => {
-    if (!doctors) return [];
-    let currentDoctors = doctors;
+    let doctors = doctorsData;
 
     if (debouncedSearchTerm && filteredDoctorIds) {
         const idSet = new Set(filteredDoctorIds);
-        currentDoctors = currentDoctors.filter(doc => idSet.has(doc.id));
+        doctors = doctors.filter(doc => idSet.has(doc.id));
     }
     
     if (activeSpecialty !== t('semua')) {
-      currentDoctors = currentDoctors.filter(doc => doc.specialty === activeSpecialty);
+      return doctors.filter(doc => doc.specialty === activeSpecialty);
     }
     
-    return currentDoctors;
-  }, [doctors, debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t]);
+    return doctors;
+  }, [debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t]);
 
 
   const getTooltipContent = (doctor: Doctor) => {
@@ -96,19 +78,6 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
       return 'Dokter tidak membuka praktek saat ini.';
     }
     return 'Dokter sedang membuka praktek sesuai jadwal.';
-  }
-
-  if (!doctors) {
-      return (
-          <div className="py-16 md:py-24">
-              <div className="container px-4 md:px-6">
-                  <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
-                  <Card className="p-12 text-center text-muted-foreground">
-                      Memuat data dokter...
-                  </Card>
-              </div>
-          </div>
-      )
   }
 
   return (
@@ -137,9 +106,6 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: 
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-             <div className="mt-4 flex justify-end">
-                <DownloadScheduleButton doctors={displayedDoctors} specialty={activeSpecialty} />
             </div>
           </Card>
 

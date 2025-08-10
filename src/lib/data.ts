@@ -1,6 +1,6 @@
 
 import { Hospital, Users, HeartPulse, FlaskConical, Heart, Mail, UserSearch, MessageCircle, MapPin } from 'lucide-react';
-import type { Service, Facility, Doctor, Translations, NavItem } from '@/lib/types';
+import type { Service, Facility, Doctor, Translations, NavItem, Partner } from '@/lib/types';
 import * as LucideIcons from 'lucide-react';
 
 export const translations: Translations = {
@@ -42,13 +42,41 @@ export const getNavItems = (t: (key: string) => string): NavItem[] => [
 
 export const allLucideIcons = Object.keys(LucideIcons).filter(key => key !== 'createLucideIcon' && key !== 'icons' && typeof (LucideIcons as any)[key] === 'object');
 
-export const servicesData: Omit<Service, 'iconUrl' | 'docId' | 'id'>[] = [
-    { name: 'Unit Gawat Darurat (UGD)', description: 'Pelayanan gawat darurat 24 jam dengan tim medis dan peralatan lengkap.' }, 
-    { name: 'Rawat Inap', description: 'Kamar perawatan yang nyaman dan aman dengan pengawasan medis berkelanjutan.' }, 
-    { name: 'Poliklinik Spesialis', description: 'Konsultasi dengan dokter spesialis di berbagai bidang untuk penanganan spesifik.' }, 
-    { name: 'Laboratorium', description: 'Fasilitas modern untuk pemeriksaan sampel guna mendukung diagnosis akurat.' }, 
-    { name: 'Radiologi', description: 'Layanan pencitraan medis seperti Rontgen dan USG untuk melihat kondisi organ dalam.' },
-    { name: 'Farmasi', description: 'Menyediakan obat-obatan resep dan non-resep dengan jaminan kualitas.' }
+export const servicesData: Service[] = [
+    { id: '1', name: 'Unit Gawat Darurat (UGD)', description: 'Pelayanan gawat darurat 24 jam dengan tim medis dan peralatan lengkap.', iconUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722838962/emergency-svgrepo-com_1_b31gss.svg' },
+    { id: '2', name: 'Rawat Inap', description: 'Kamar perawatan yang nyaman dan aman dengan pengawasan medis berkelanjutan.', iconUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722838962/hospital-bed-svgrepo-com_1_w1omf8.svg' },
+    { id: '3', name: 'Poliklinik Spesialis', description: 'Konsultasi dengan dokter spesialis di berbagai bidang untuk penanganan spesifik.', iconUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722838962/doctor-svgrepo-com_1_i1ikay.svg' },
+    { id: '4', name: 'Laboratorium', description: 'Fasilitas modern untuk pemeriksaan sampel guna mendukung diagnosis akurat.', iconUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722838962/test-tube-svgrepo-com_1_q1h3sp.svg' },
+    { id: '5', name: 'Radiologi', description: 'Layanan pencitraan medis seperti Rontgen dan USG untuk melihat kondisi organ dalam.', iconUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722838962/x-ray-bones-svgrepo-com_1_qgrfxe.svg' },
+    { id: '6', name: 'Farmasi', description: 'Menyediakan obat-obatan resep dan non-resep dengan jaminan kualitas.', iconUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722838962/pills-bottle-svgrepo-com_1_tgl5oj.svg' }
+];
+
+export const facilitiesData: Facility[] = [
+    { id: '1', name: 'Ruang Operasi Modern', description: 'Dilengkapi dengan teknologi bedah terkini untuk berbagai jenis operasi.', imageUrl: 'https://images.pexels.com/photos/8468725/pexels-photo-8468725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'operating room' },
+    { id: '2', name: 'Unit Perawatan Intensif (ICU)', description: 'Pengawasan ketat 24 jam untuk pasien dalam kondisi kritis.', imageUrl: 'https://images.pexels.com/photos/263174/pexels-photo-263174.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'intensive care unit' },
+    { id: '3', name: 'Kamar Rawat Inap', description: 'Tersedia berbagai kelas kamar yang nyaman untuk mendukung pemulihan.', imageUrl: 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'hospital room' },
+    { id: '4', name: 'Laboratorium Klinik', description: 'Pemeriksaan laboratorium lengkap dengan hasil yang cepat dan akurat.', imageUrl: 'https://images.pexels.com/photos/3938023/pexels-photo-3938023.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'medical laboratory' },
+    { id: '5', name: 'Ambulans Gawat Darurat', description: 'Siap 24 jam untuk penjemputan dan rujukan pasien darurat.', imageUrl: 'https://images.pexels.com/photos/3786126/pexels-photo-3786126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'ambulance' },
+    { id: '6', name: 'Area Parkir Luas', description: 'Kapasitas parkir yang memadai untuk kenyamanan pengunjung.', imageUrl: 'https://images.pexels.com/photos/1123982/pexels-photo-1123982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', aiHint: 'parking lot' }
+];
+
+export const doctorsData: Doctor[] = [
+    { id: 'doc1', name: 'Dr. Budi Santoso, Sp.PD', specialty: 'Penyakit Dalam', schedule: 'Senin, Rabu, Jumat (09:00 - 12:00)', status: 'Praktek', imageUrl: '', aiHint: '' },
+    { id: 'doc2', name: 'Dr. Citra Lestari, Sp.A', specialty: 'Anak', schedule: 'Selasa, Kamis (14:00 - 17:00)', status: 'Praktek', imageUrl: '', aiHint: '' },
+    { id: 'doc3', name: 'Dr. Ahmad Fauzi, Sp.OG', specialty: 'Kandungan', schedule: 'Senin, Rabu (13:00 - 16:00)', status: 'Tutup', statusInfo: 'Cuti hingga 15 Agu 2024', imageUrl: '', aiHint: '' },
+    { id: 'doc4', name: 'Dr. Dewi Anggraini, Sp.K', specialty: 'Kulit & Kelamin', schedule: 'Selasa, Kamis, Sabtu (10:00 - 13:00)', status: 'Praktek', imageUrl: '', aiHint: '' },
+    { id: 'doc5', name: 'Dr. Eko Prasetyo, Sp.B', specialty: 'Bedah Umum', schedule: 'Jumat (18:00 - 21:00)', status: 'Praktek', imageUrl: '', aiHint: '' }
+];
+
+export const partnersData: Partner[] = [
+    { id: 'p1', name: 'BPJS Kesehatan', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722841440/BPJS_Kesehatan_logo.svg_nprnwv.png', aiHint: 'bpjs logo' },
+    { id: 'p2', name: 'Prudential', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722841525/prudential-plc-logo-AF0A5565F3-seeklogo.com_z0pr0a.png', aiHint: 'prudential logo' },
+    { id: 'p3', name: 'Allianz', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722841584/Allianz_logo_logotype_emblem-768x432_k1s8sl.png', aiHint: 'allianz logo' },
+    { id: 'p4', name: 'Manulife', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722841639/Manulife_logo_horz_rgb_pos_hf1a6i.png', aiHint: 'manulife logo' },
+    { id: 'p5', name: 'AIA', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722841680/AIA_Logo_Reg-01_c5qkqu.png', aiHint: 'aia logo' },
+    { id: 'p6', name: 'Sinarmas MSIG', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722841724/Logo_Asuransi_Sinarmas_MSIG_cqbbnp.png', aiHint: 'sinarmas logo' },
+    { id: 'p7', name: 'Adira Insurance', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722841804/Adira-Insurance_cslh0s.png', aiHint: 'adira logo' },
+    { id: 'p8', name: 'Kaltim Prima Coal', imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1722841850/logo-kpc_h9tgah.png', aiHint: 'kpc logo' }
 ];
 
 export const quickAccessItems = (t: (key: string) => string, navigate: (path: string) => void) => [

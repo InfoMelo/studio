@@ -1,11 +1,11 @@
 
 'use client';
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocalization } from '@/hooks/use-localization';
-import { quickAccessItems } from '@/lib/data';
+import { servicesData, quickAccessItems, partnersData } from '@/lib/data';
 import SectionHeader from '@/components/common/section-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,8 +14,6 @@ import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
-import type { Service, Partner } from '@/lib/types';
-import { Skeleton } from '../ui/skeleton';
 
 const heroSlides = [
     { imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754745892/20250809_155010_nebhpv.jpg', titleKey: 'heroTitle', subtitleKey: 'heroSubtitle', aiHint: 'hospital building' },
@@ -29,64 +27,7 @@ const whyUsItems = (t: (key: string) => string) => [
     { title: t('kenyamananTitle'), desc: t('kenyamananDesc'), imageUrl: 'https://res.cloudinary.com/ddyqhlilj/image/upload/v1754741672/lobi_y0el0x.jpg', aiHint: 'hospital lobby' },
 ];
 
-function PartnersSection({ partners }: { partners: Partner[] }) {
-  const { t } = useLocalization();
-
-  return (
-    <section className="py-16 md:py-24">
-      <div className="container px-4 md:px-6">
-        <SectionHeader title={t('mitraKami')} subtitle={t('mitraSubtitle')} />
-        <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
-          {partners.slice(0, 8).map((partner) => (
-            <div key={partner.docId} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
-              <Image
-                src={partner.imageUrl}
-                alt={partner.name}
-                data-ai-hint={partner.aiHint}
-                width={140}
-                height={70}
-                className="object-contain"
-              />
-            </div>
-          ))}
-        </div>
-        <div className="mt-12 text-center">
-          <Button variant="outline" asChild>
-            <Link href="/about?page=partners">
-              {t('selengkapnya')} <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PartnersSectionSkeleton() {
-    const { t } = useLocalization();
-    return (
-        <section className="py-16 md:py-24">
-            <div className="container px-4 md:px-6">
-                <SectionHeader title={t('mitraKami')} subtitle={t('mitraSubtitle')} />
-                <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
-                    {Array.from({ length: 8 }).map((_, index) => (
-                        <div key={index} className="flex justify-center">
-                            <Skeleton className="h-16 w-32" />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-
-interface HomePageProps {
-    services: Service[];
-    partners: Partner[];
-}
-
-export default function HomePage({ services, partners }: HomePageProps) {
+export default function HomePage() {
   const { t } = useLocalization();
   const router = useRouter();
   const qai = quickAccessItems(t, (path: string) => router.push(path));
@@ -188,9 +129,9 @@ export default function HomePage({ services, partners }: HomePageProps) {
         <div className="container px-4 md:px-6">
           <SectionHeader title={t('pusatKeunggulan')} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {services && services.slice(0, 6).map(service => (
-            <Card key={service.docId} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
-                {service.iconUrl && <Image src={service.iconUrl} alt={service.name} width={48} height={48} className="h-12 w-12 text-primary mb-4 object-contain" />}
+            {servicesData.slice(0, 6).map(service => (
+            <Card key={service.id} className="text-center flex flex-col items-center justify-start p-6 transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg">
+                <Image src={service.iconUrl} alt={service.name} width={48} height={48} className="h-12 w-12 text-primary mb-4 object-contain" />
                 <CardTitle className="mb-2 text-xl">{service.name}</CardTitle>
                 <CardDescription>{service.description}</CardDescription>
             </Card>
@@ -199,9 +140,27 @@ export default function HomePage({ services, partners }: HomePageProps) {
         </div>
       </section>
 
-      <Suspense fallback={<PartnersSectionSkeleton />}>
-        {partners && partners.length > 0 && <PartnersSection partners={partners} />}
-      </Suspense>
+      {/* Our Partners Section */}
+      <section className="py-16 md:py-24">
+        <div className="container px-4 md:px-6">
+          <SectionHeader title={t('mitraKami')} subtitle={t('mitraSubtitle')} />
+          <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
+            {partnersData.slice(0, 8).map((partner) => (
+              <div key={partner.id} className="flex justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
+                <Image
+                  src={partner.imageUrl}
+                  alt={partner.name}
+                  data-ai-hint={partner.aiHint}
+                  width={140}
+                  height={70}
+                  className="object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }

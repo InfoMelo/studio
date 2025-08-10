@@ -11,11 +11,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
-import { generateImage } from '@/ai/flows/image-generation';
-import { Sparkles, Loader2 } from 'lucide-react';
 
 const articleFormSchema = z.object({
   title: z.string().min(5, { message: "Judul artikel harus diisi (minimal 5 karakter)." }),
@@ -32,14 +30,11 @@ export default function EditArticlePage() {
     const params = useParams();
     const { toast } = useToast();
     const [loading, setLoading] = useState(true);
-    const [isPending, startTransition] = useTransition();
     const docId = params.id as string;
 
     const form = useForm<ArticleFormValues>({
         resolver: zodResolver(articleFormSchema),
     });
-    
-    const aiHintValue = form.watch('aiHint');
 
     useEffect(() => {
         if (docId) {
@@ -54,35 +49,6 @@ export default function EditArticlePage() {
             });
         }
     }, [docId, form, router, toast]);
-
-    const handleGenerateImage = () => {
-        if (!aiHintValue) {
-            toast({
-                variant: 'destructive',
-                title: 'AI Hint Kosong',
-                description: 'Isi "AI Hint" sebagai prompt untuk membuat gambar.',
-            });
-            return;
-        }
-
-        startTransition(async () => {
-            try {
-                const result = await generateImage({ prompt: aiHintValue });
-                form.setValue('imageUrl', result.imageUrl, { shouldValidate: true });
-                toast({
-                    title: 'Gambar Dihasilkan',
-                    description: 'URL gambar berhasil diperbarui.',
-                });
-            } catch (error) {
-                console.error('Image generation failed:', error);
-                toast({
-                    variant: 'destructive',
-                    title: 'Gagal Membuat Gambar',
-                    description: 'Terjadi kesalahan saat menghubungi AI. Coba lagi nanti.',
-                });
-            }
-        });
-    };
 
     async function onSubmit(data: ArticleFormValues) {
         try {
@@ -186,18 +152,9 @@ export default function EditArticlePage() {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>URL Gambar Utama</FormLabel>
-                                    <div className="flex items-center gap-2">
-                                        <FormControl>
-                                            <Input placeholder="https://... atau generate dengan AI" {...field} />
-                                        </FormControl>
-                                        <Button type="button" onClick={handleGenerateImage} disabled={isPending}>
-                                            {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                                            <span className="ml-2 hidden sm:inline">Generate</span>
-                                        </Button>
-                                    </div>
-                                    <FormDescription>
-                                        Isi "AI Hint", lalu klik tombol "Generate" atau masukkan URL manual.
-                                    </FormDescription>
+                                    <FormControl>
+                                        <Input placeholder="https://..." {...field} />
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
