@@ -62,7 +62,7 @@ export default function LoginPage() {
                     case 'auth/user-not-found':
                     case 'auth/wrong-password':
                     case 'auth/invalid-credential':
-                        errorMessage = 'Email atau password yang Anda masukkan salah.';
+                        errorMessage = 'Kombinasi email dan password tidak cocok. Silakan coba lagi.';
                         break;
                     case 'auth/too-many-requests':
                         errorMessage = 'Terlalu banyak percobaan login. Silakan coba lagi nanti.';
