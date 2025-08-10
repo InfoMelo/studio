@@ -3,19 +3,13 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Suspense } from 'react';
-import { PT_Sans, Source_Code_Pro } from 'next/font/google';
+import { PT_Sans } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 const ptSans = PT_Sans({
   subsets: ['latin'],
   weight: ['400', '700'],
   variable: '--font-body',
-});
-
-const sourceCodePro = Source_Code_Pro({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-code',
 });
 
 
@@ -88,7 +82,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn(ptSans.variable, sourceCodePro.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn(ptSans.variable)}>
       <head>
         <script
           type="application/ld+json"

@@ -7,8 +7,8 @@ import { LanguageProvider } from '@/contexts/language-context';
 import { getServices, getPartners } from '@/app/admin/actions';
 
 export default async function Home() {
-  const services = await getServices();
   const partners = await getPartners();
+  const services = await getServices();
 
   return (
     <LanguageProvider>
