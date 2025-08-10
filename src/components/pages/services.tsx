@@ -35,5 +35,3 @@ export default function ServicesPage({ services }: { services: ServiceType[] }) 
     </div>
   );
 }
-
-    

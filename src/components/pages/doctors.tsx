@@ -22,7 +22,7 @@ interface DoctorSchedulePageProps {
   doctors: Doctor[];
 }
 
-export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: allDoctors }: DoctorSchedulePageProps) {
+export default function DoctorSchedulePage({ initialSearchTerm = '', doctors }: DoctorSchedulePageProps) {
   const { t } = useLocalization();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [activeSpecialty, setActiveSpecialty] = useState('Semua');
@@ -32,9 +32,9 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   const specialties = useMemo(() => {
-    if (!allDoctors) return [t('semua')];
-    return [t('semua'), ...new Set(allDoctors.map(doc => doc.specialty))];
-  }, [t, allDoctors]);
+    if (!doctors) return [t('semua')];
+    return [t('semua'), ...new Set(doctors.map(doc => doc.specialty))];
+  }, [t, doctors]);
 
   const performSearch = useCallback(async (term: string) => {
     if (!term.trim()) {
@@ -48,9 +48,9 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
       setFilteredDoctorIds(result.results);
     } catch(error) {
         console.error("Smart search failed:", error);
-        if (allDoctors) {
+        if (doctors) {
             const lowerCaseTerm = term.toLowerCase();
-            const fallbackResults = allDoctors.filter(d => 
+            const fallbackResults = doctors.filter(d => 
                 d.name.toLowerCase().includes(lowerCaseTerm) ||
                 d.specialty.toLowerCase().includes(lowerCaseTerm)
             ).map(d => d.id);
@@ -61,7 +61,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
     } finally {
       setSearchLoading(false);
     }
-  }, [allDoctors]);
+  }, [doctors]);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -72,20 +72,20 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
   }, [debouncedSearchTerm, performSearch]);
   
   const displayedDoctors = useMemo(() => {
-    if (!allDoctors) return [];
-    let doctors = allDoctors;
+    if (!doctors) return [];
+    let currentDoctors = doctors;
 
     if (debouncedSearchTerm && filteredDoctorIds) {
         const idSet = new Set(filteredDoctorIds);
-        doctors = doctors.filter(doc => idSet.has(doc.id));
+        currentDoctors = currentDoctors.filter(doc => idSet.has(doc.id));
     }
     
     if (activeSpecialty !== t('semua')) {
-      doctors = doctors.filter(doc => doc.specialty === activeSpecialty);
+      currentDoctors = currentDoctors.filter(doc => doc.specialty === activeSpecialty);
     }
     
-    return doctors;
-  }, [allDoctors, debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t]);
+    return currentDoctors;
+  }, [doctors, debouncedSearchTerm, filteredDoctorIds, activeSpecialty, t]);
 
 
   const getTooltipContent = (doctor: Doctor) => {
@@ -98,7 +98,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
     return 'Dokter sedang membuka praktek sesuai jadwal.';
   }
 
-  if (!allDoctors) {
+  if (!doctors) {
       return (
           <div className="py-16 md:py-24">
               <div className="container px-4 md:px-6">
@@ -199,5 +199,3 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
     </TooltipProvider>
   );
 }
-
-    

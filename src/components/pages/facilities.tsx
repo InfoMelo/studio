@@ -39,5 +39,3 @@ export default function FacilitiesPage({ facilities }: { facilities: Facility[] 
     </div>
   );
 }
-
-    

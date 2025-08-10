@@ -205,5 +205,3 @@ export default function HomePage({ services, partners }: HomePageProps) {
     </div>
   );
 }
-
-    
