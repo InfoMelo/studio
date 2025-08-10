@@ -42,7 +42,7 @@ export const getNavItems = (t: (key: string) => string): NavItem[] => [
 export const allLucideIcons = Object.keys(LucideIcons).filter(key => key !== 'createLucideIcon' && key !== 'icons' && typeof (LucideIcons as any)[key] === 'object');
 
 
-export const servicesData: Omit<Service, 'iconUrl'>[] = [
+export const servicesData: Omit<Service, 'iconUrl' | 'docId'>[] = [
     { id: 'ugd', name: 'Unit Gawat Darurat (UGD)', description: 'Pelayanan gawat darurat 24 jam dengan tim medis dan peralatan lengkap.' }, 
     { id: 'rawat-inap', name: 'Rawat Inap', description: 'Kamar perawatan yang nyaman dan aman dengan pengawasan medis berkelanjutan.' }, 
     { id: 'poliklinik', name: 'Poliklinik Spesialis', description: 'Konsultasi dengan dokter spesialis di berbagai bidang untuk penanganan spesifik.' }, 

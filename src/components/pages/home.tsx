@@ -5,7 +5,7 @@ import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLocalization } from '@/hooks/use-localization';
-import { quickAccessItems } from '@/lib/data';
+import { quickAccessItems, getNavItems } from '@/lib/data';
 import SectionHeader from '@/components/common/section-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -199,9 +199,9 @@ export default function HomePage({ services, partners }: HomePageProps) {
         </div>
       </section>
 
-        <Suspense fallback={<PartnersSectionSkeleton />}>
-            <PartnersSection partners={partners} />
-        </Suspense>
+      <Suspense fallback={<PartnersSectionSkeleton />}>
+        {partners && partners.length > 0 && <PartnersSection partners={partners} />}
+      </Suspense>
     </div>
   );
 }
