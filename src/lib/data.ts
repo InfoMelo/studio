@@ -85,3 +85,5 @@ export const quickAccessItems = (t: (key: string) => string, navigate: (path: st
     { icon: Heart, title: 'Paket Kesehatan', subtitle: 'Lihat promosi terbaru', action: () => navigate('/services') },
     { icon: MapPin, title: t('kontak'), subtitle: 'Lokasi & informasi', action: () => navigate('/contact') }
 ];
+
+    
