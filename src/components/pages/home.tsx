@@ -164,6 +164,13 @@ export default function HomePage({ services, partners }: HomePageProps) {
               </div>
             ))}
           </div>
+           <div className="text-center mt-12">
+                <Button asChild variant="outline">
+                    <Link href="/about?page=partners">
+                        {t('lihatSemuaMitra')} <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                </Button>
+            </div>
         </div>
       </section>
 
