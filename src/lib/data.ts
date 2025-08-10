@@ -1,3 +1,4 @@
+
 import { Hospital, Users, HeartPulse, FlaskConical, Heart, Mail, UserSearch, MessageCircle, MapPin } from 'lucide-react';
 import type { Service, Facility, Doctor, Translations, NavItem } from '@/lib/types';
 import * as LucideIcons from 'lucide-react';
@@ -41,14 +42,13 @@ export const getNavItems = (t: (key: string) => string): NavItem[] => [
 
 export const allLucideIcons = Object.keys(LucideIcons).filter(key => key !== 'createLucideIcon' && key !== 'icons' && typeof (LucideIcons as any)[key] === 'object');
 
-
-export const servicesData: Omit<Service, 'iconUrl' | 'docId'>[] = [
-    { id: 'ugd', name: 'Unit Gawat Darurat (UGD)', description: 'Pelayanan gawat darurat 24 jam dengan tim medis dan peralatan lengkap.' }, 
-    { id: 'rawat-inap', name: 'Rawat Inap', description: 'Kamar perawatan yang nyaman dan aman dengan pengawasan medis berkelanjutan.' }, 
-    { id: 'poliklinik', name: 'Poliklinik Spesialis', description: 'Konsultasi dengan dokter spesialis di berbagai bidang untuk penanganan spesifik.' }, 
-    { id: 'laboratorium', name: 'Laboratorium', description: 'Fasilitas modern untuk pemeriksaan sampel guna mendukung diagnosis akurat.' }, 
-    { id: 'radiologi', name: 'Radiologi', description: 'Layanan pencitraan medis seperti Rontgen dan USG untuk melihat kondisi organ dalam.' },
-    { id: 'farmasi', name: 'Farmasi', description: 'Menyediakan obat-obatan resep dan non-resep dengan jaminan kualitas.' }
+export const servicesData: Omit<Service, 'iconUrl' | 'docId' | 'id'>[] = [
+    { name: 'Unit Gawat Darurat (UGD)', description: 'Pelayanan gawat darurat 24 jam dengan tim medis dan peralatan lengkap.' }, 
+    { name: 'Rawat Inap', description: 'Kamar perawatan yang nyaman dan aman dengan pengawasan medis berkelanjutan.' }, 
+    { name: 'Poliklinik Spesialis', description: 'Konsultasi dengan dokter spesialis di berbagai bidang untuk penanganan spesifik.' }, 
+    { name: 'Laboratorium', description: 'Fasilitas modern untuk pemeriksaan sampel guna mendukung diagnosis akurat.' }, 
+    { name: 'Radiologi', description: 'Layanan pencitraan medis seperti Rontgen dan USG untuk melihat kondisi organ dalam.' },
+    { name: 'Farmasi', description: 'Menyediakan obat-obatan resep dan non-resep dengan jaminan kualitas.' }
 ];
 
 export const quickAccessItems = (t: (key: string) => string, navigate: (path: string) => void) => [
@@ -57,3 +57,5 @@ export const quickAccessItems = (t: (key: string) => string, navigate: (path: st
     { icon: Heart, title: 'Paket Kesehatan', subtitle: 'Lihat promosi terbaru', action: () => navigate('/services') },
     { icon: MapPin, title: t('kontak'), subtitle: 'Lokasi & informasi', action: () => navigate('/contact') }
 ];
+
+    

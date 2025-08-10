@@ -32,6 +32,7 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
 
   const specialties = useMemo(() => {
+    if (!allDoctors) return [t('semua')];
     return [t('semua'), ...new Set(allDoctors.map(doc => doc.specialty))];
   }, [t, allDoctors]);
 
@@ -47,12 +48,16 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
       setFilteredDoctorIds(result.results);
     } catch(error) {
         console.error("Smart search failed:", error);
-        const lowerCaseTerm = term.toLowerCase();
-        const fallbackResults = allDoctors.filter(d => 
-            d.name.toLowerCase().includes(lowerCaseTerm) ||
-            d.specialty.toLowerCase().includes(lowerCaseTerm)
-        ).map(d => d.id);
-        setFilteredDoctorIds(fallbackResults);
+        if (allDoctors) {
+            const lowerCaseTerm = term.toLowerCase();
+            const fallbackResults = allDoctors.filter(d => 
+                d.name.toLowerCase().includes(lowerCaseTerm) ||
+                d.specialty.toLowerCase().includes(lowerCaseTerm)
+            ).map(d => d.id);
+            setFilteredDoctorIds(fallbackResults);
+        } else {
+            setFilteredDoctorIds([]);
+        }
     } finally {
       setSearchLoading(false);
     }
@@ -67,13 +72,14 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
   }, [debouncedSearchTerm, performSearch]);
   
   const displayedDoctors = useMemo(() => {
+    if (!allDoctors) return [];
     let doctors = allDoctors;
 
     if (debouncedSearchTerm && filteredDoctorIds) {
-      const idSet = new Set(filteredDoctorIds);
-      doctors = doctors.filter(doc => idSet.has(doc.id));
+        const idSet = new Set(filteredDoctorIds);
+        doctors = doctors.filter(doc => idSet.has(doc.id));
     }
-
+    
     if (activeSpecialty !== t('semua')) {
       doctors = doctors.filter(doc => doc.specialty === activeSpecialty);
     }
@@ -90,6 +96,19 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
       return 'Dokter tidak membuka praktek saat ini.';
     }
     return 'Dokter sedang membuka praktek sesuai jadwal.';
+  }
+
+  if (!allDoctors) {
+      return (
+          <div className="py-16 md:py-24">
+              <div className="container px-4 md:px-6">
+                  <SectionHeader title={t('jadwalDokterTitle')} subtitle={t('jadwalDokterSubtitle')} />
+                  <Card className="p-12 text-center text-muted-foreground">
+                      Memuat data dokter...
+                  </Card>
+              </div>
+          </div>
+      )
   }
 
   return (
@@ -180,3 +199,5 @@ export default function DoctorSchedulePage({ initialSearchTerm = '', doctors: al
     </TooltipProvider>
   );
 }
+
+    
