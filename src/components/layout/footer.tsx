@@ -33,13 +33,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1 space-y-4">
             <Link href="/" className="flex items-center gap-3">
+              <div className="bg-white p-1 rounded-full">
                 <Image
                   src="https://res.cloudinary.com/ddyqhlilj/image/upload/v1754800465/logo_meloy_l6pnrf.svg"
                   alt="Logo RSU Meloy"
-                  width={40}
-                  height={40}
+                  width={32}
+                  height={32}
                   className="object-contain"
                 />
+              </div>
               <h3 className="text-xl font-bold">RSU Meloy</h3>
             </Link>
             <p className="text-sm text-primary-foreground/80">{t('footerTagline')}</p>
